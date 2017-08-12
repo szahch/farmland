@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
 				// 手动设置session的有效期为30分钟
 				String sessionId = session.getId();
 				Cookie cookie = new Cookie("JSESSIONID", sessionId);
-				cookie.setMaxAge(2);
+				cookie.setMaxAge(60);
 				cookie.setPath(request.getContextPath());
 				response.addCookie(cookie);
 				// 登录成功后要存入用户的登录状态，key是用户对象的String形式value就是用户对象(model)！！别的页面应该能用到

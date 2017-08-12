@@ -9,14 +9,9 @@
 	href="http://192.168.1.244:8080/arcgis_js_api/library/4.4/esri/css/main.css">
 <script src="https://js.arcgis.com/4.4/"></script>
 
-<style>
-html, body, #viewDiv {
-	padding: 0;
-	margin: 0;
-	height: 100%;
-	width: 100%;
-}
+<link rel="stylesheet" href="/Farmland/css/map/main.css" type="text/css">
 
+<style>
 #layerToggle {
 	top: 20px;
 	right: 20px;
@@ -52,23 +47,20 @@ html, body, #viewDiv {
 								visible : true
 							} ]
 						});
-				console.log("哈哈");
 				var map = new Map({
 					basemap : "streets",
 					layers : [ tileLayer ]
 				});
-				map.add(tileLayer);
 
 				var view = new MapView({
-					container : "viewDiv",
+					container : "mapDiv",
 					map : map,
-
 				});
 			});
 </script>
 
 </head>
 <body>
-	<div id="viewDiv"></div>
+	<div id="mapDiv"></div>
 </body>
 </html>

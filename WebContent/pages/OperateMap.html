@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+<meta name="viewport"
+	content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+<title>操作地图界面</title>
+
+<link rel="stylesheet"
+	href="http://192.168.1.244:8080/arcgis_js_api/library/4.4/esri/css/main.css">
+<link rel="stylesheet"
+	href="http://192.168.1.244:8080/arcgis_js_api/library/4.4/dijit/themes/tundra/tundra.css" />
+<link rel="stylesheet" href="/Farmland/css/map/main.css">
+
+<script src="https://js.arcgis.com/4.4/"></script>
+
+<style>
+
+</style>
+
+<script>
+	require([
+			"dojo/parser", 
+			"esri/Map", 
+			"esri/views/MapView",
+			"esri/layers/MapImageLayer",
+			"dijit/layout/BorderContainer",
+			"dijit/layout/ContentPane", 
+			"dijit/layout/AccordionContainer",
+			"dojo/domReady!" ], function(parser, Map, MapView, MapImageLayer) {
+		parser.parse();
+		
+		var tileLayer = new MapImageLayer(
+				{
+					url : "http://192.168.1.244:8080/arcgis/rest/services/Learning/GeoImage/MapServer",
+					sublayers : [ {
+						id : 3,
+						visible : true
+					}, {
+						id : 2,
+						visible : true
+					}, {
+						id : 1,
+						visible : true
+					}, {
+						id : 0,
+						visible : true
+					} ]
+				});
+		var map = new Map({
+			basemap : "streets",
+			layers : [ tileLayer ]
+		});
+
+		var view = new MapView({
+			container : "mapDiv",
+			map : map,
+		});
+	});
+</script>
+
+</head>
+<body>
+
+	<div id="mainDiv" data-dojo-type="dijit/layout/BorderContainer"
+		data-dojo-props="gutters:true, design:'headline'" >
+
+		<div data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'top'"
+			style="background-color: #b39b86; height: 10%;">top</div>
+		<div data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'left', splitter:'true'"
+			style="background-color: #acb386; width: 100px;">left</div>
+		<div id="mapDiv" data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'center'"></div>
+		<div data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'right', splitter:'true'"
+			style="background-color: #acb386; width: 100px;">right</div>
+		<div data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'bottom', splitter:'true'"
+			style="background-color: #b39b86; height: 50px;">bottom</div>
+	</div>
+
+</body>
+</html>
