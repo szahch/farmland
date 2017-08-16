@@ -12,7 +12,7 @@
          var name=document.getElementById("name").value;          
          $.ajax({   
                 type:"GET", //请求方式  
-                url:"http://192.168.1.244:8080/arcgis/rest/services/Learning/GeoImage/MapServer/layers?f=pjson", //请求路径  
+                url:"http://192.168.2.144:8080/arcgis/rest/services/Learning/GeoImage/MapServer/layers?f=pjson", //请求路径  
                 cache: false,     
                 data:"name="+name,  //传参  
                 dataType: 'json',   //返回值类型  
