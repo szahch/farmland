@@ -12,10 +12,9 @@
 	href="http://192.168.2.101:8080/arcgis_js_api/library/4.4/dijit/themes/tundra/tundra.css" />
 <link rel="stylesheet" href="/Farmland/css/map/main.css">
 
-  <script src="https://js.arcgis.com/4.4/"></script>
+<script src="https://js.arcgis.com/4.4/"></script>
 <!--<script src="http://192.168.2.101:8080/arcgis_js_api/library/4.4/init.js"></script>-->
 <style>
-
 </style>
 
 
@@ -26,38 +25,33 @@
 		async : true,
 		packages : [ {
 			"name" : "map",
-			"location" : location.pathname.replace(/\/[^/]+$/, "")
-					+ "js/map"
+			"location" : location.pathname.replace(/\/[^/]+$/, "") + "/js/map"
 		} ]
 	};
 </script>
 
 <script>
-
 	var toc = null;
 
-	require([
-			"dojo/parser", 
-			"esri/Map", 
-			"esri/views/MapView",
-			"esri/layers/MapImageLayer",
-			"esri/layers/FeatureLayer",
-			 "esri/widgets/Legend",
-			"/Farmland/js/map/TocWidget.js",
-			"dijit/layout/BorderContainer",
-			"dijit/layout/ContentPane", 
-			"dijit/layout/AccordionContainer",
-			"dojo/domReady!" ], 
-			function(parser, Map, MapView, MapImageLayer, FeatureLayer, Legend, TocWidget) {
-		
-		parser.parse();
-		
+	require(
+			[ "dojo/parser", "esri/Map", "esri/views/MapView",
+					"esri/layers/MapImageLayer", "esri/layers/FeatureLayer",
+					"esri/widgets/Legend", "/Farmland/js/map/TocWidget.js",
+					"dijit/layout/BorderContainer", "dijit/layout/ContentPane",
+					"dijit/layout/AccordionContainer", "dojo/domReady!" ],
+			function(parser, Map, MapView, MapImageLayer, FeatureLayer, Legend,
+					TocWidget) {
 
-		var tileLayer = new MapImageLayer(
+				parser.parse();
+
+				var tileLayer = new MapImageLayer(
 						{
 							id : "三调影像",
 							url : "http://192.168.2.144:6080/arcgis/rest/services/Learning/GeoImage/MapServer",
 							sublayers : [ {
+								id : 4,
+								visible : true
+							}, {
 								id : 3,
 								visible : true
 							}, {
@@ -74,12 +68,12 @@
 
 				var tileLayer2 = new FeatureLayer(
 						{
-			url : "http://192.168.2.144:6080/arcgis/rest/services/Learning/Polygon3/MapServer/0",
+							url : "http://192.168.2.144:6080/arcgis/rest/services/Learning/Polygon3/MapServer/0",
 						});
-				
+
 				var map = new Map({
 					// basemap : "streets",
-					layers : [ tileLayer,tileLayer2 ],
+					layers : [ tileLayer, tileLayer2 ],
 					logo : false,
 					slider : false
 				});
@@ -91,36 +85,37 @@
 
 				view.center = [ 114.06667, 22.61667 ];
 				view.zoom = 10;
-				
-				
-				view.then(function(){
-					
+
+				view.then(function() {
+
 					console.log("地图加载完成");
 					var legend = new Legend({
-						container :"toc1",
-			            view: view,
-			            layerInfos: [{
-			              layer: tileLayer2,
-			              title: "图例"
-			            }]
-			          });
-
-			          // Add widget to the bottom right corner of the view
-			          // view.ui.add(legend, "bottom-right");
-			          
-					aa();
-					}, 
-					function(error){
-					 console.log("The view's resources failed to load: ", error);
+						container : "toc1",
+						view : view,
+						layerInfos : [ {
+							layer : tileLayer2,
+							title : "图例"
+						} ]
 					});
-				
-				function aa(){
-				toc = new TocWidget();
-				toc.setMap(map);
-				toc.startup();
-				// document.getElementById('toc') = toc;
-				// var ds = document.getElementById("toc");
-				// ds = toc;
+
+					// Add widget to the bottom right corner of the view
+					// view.ui.add(legend, "bottom-right");
+
+					aa();
+				},
+						function(error) {
+							console.log(
+									"The view's resources failed to load: ",
+									error);
+						});
+
+				function aa() {
+					console.log("aa");
+					toc = new TocWidget();
+					console.log("aa end" + toc);
+					toc.setMap(map);
+					toc.startup();
+
 				}
 			});
 </script>
@@ -128,21 +123,33 @@
 </head>
 <body>
 
-	<div  id="mainDiv" data-dojo-type="dijit/layout/BorderContainer"
-		data-dojo-props="gutters:true, design:'headline'" >
+	<div id="mainDiv" data-dojo-type="dijit/layout/BorderContainer"
+		data-dojo-props="gutters:true, design:'headline'">
 
 		<div data-dojo-type="dijit/layout/ContentPane"
-			data-dojo-props="region:'top'"
-			style="height: 5%;">
-			耕地现状动态监测信息管理系统
-			</div>
-		<div  data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'top'" style="height: 5%;">
+			耕地现状动态监测信息管理系统</div>
+		<div data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="region:'left', splitter:'true'"
-			style="background-color: #acb386; width: 100px;">
-		  	<div id="toc1"></div>
-		  	
-		  	<div id="toc"></div>
+			style="background-color: #acb386; width: 200px;">
+
+			<div id="toc" data-dojo-attach-point="tocNode" align="left"
+				style="width: 90%; filter: alpha(opacity = 90); -moz-opacity: 0.9; opacity: 0.9; background-color: white; overflow: auto; max-height: 400px;">
 			</div>
+			<br /> 活动图层： <select name="transparencyList" id="transparencyList"
+				data-dojo-attach-event="onchange:updateTransparencyLayer">
+				<option value="" selected></option>
+			</select> &nbsp;<br /> <br /> <input type="button"
+				data-dojo-attach-event="onclick:zoomToLayer" value="放大到该图层地理范围"
+				style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;">
+			<br /> <br /> 改变图层的透明度<br>
+			<div data-dojo-type="dijit/form/HorizontalSlider"
+				data-dojo-attach-point="slider"
+				data-dojo-attach-event="onChange:changeTransparency"
+				data-dojo-props="name:'slider',value:100,maximum:100,minimum:0,pageIncrement:100,showButtons:true,intermediateChanges:true,slideDuration:500"
+				style="width: 200px; height: 20px;"></div>
+
+		</div>
 		<div id="mapDiv" data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="region:'center'"></div>
 		<div data-dojo-type="dijit/layout/ContentPane"
