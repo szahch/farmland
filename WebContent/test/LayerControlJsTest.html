@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LayerControlJsTest</title>
+
+<link rel="stylesheet" type="text/css"
+	href="http://192.168.2.101:8080/arcgis_js_api_v3.21/library/3.21/3.21/esri/css/esri.css" />
+<style>
+html, body, #map {
+	height: 400px;
+	width: 400px;
+}
+
+#control {
+	width: 100px;
+	height: 600px;
+}
+
+#map, #control {
+	float: left;
+}
+</style>
+
+<script
+	src="http://192.168.2.101:8080/arcgis_js_api_v3.21/library/3.21/3.21/init.js"></script>
+
+<script>
+	require(
+			[ "dojo/parser", "../js/map/LayerControl_v3.21.js",
+					"../js/map/LeftToolBar_v3.21.js", "esri/map",
+					"esri/layers/ArcGISTiledMapServiceLayer",
+					"esri/layers/ArcGISDynamicMapServiceLayer",
+					"dojo/domReady!" ],
+			function(parser, LayerControl_v321, LeftToolBar_v321, Map,
+					ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer) {
+				console.log(" LayerControlJsTest::start.");
+
+				parser.parse();
+
+				var map = new Map("map");
+				/* 			var tiled = new ArcGISTiledMapServiceLayer(
+									"https://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer");
+							map.addLayer(tiled); */
+
+				var layer = new esri.layers.ArcGISDynamicMapServiceLayer(
+						"http://192.168.2.144:6080/arcgis/rest/services/Learning/GeoImage/MapServer",
+						{
+							id : '深圳三调影像'
+						});
+				map.addLayer(layer);
+
+				map.on("load", function() {
+
+					try {
+						var lc = new LayerControl_v321({
+							id : "control",
+							map : map
+						});
+						//lc.showUI();
+					} catch (err) {
+						console.log(" LayerControlJsTest::" + err);
+					}
+
+					try {
+						var ltb = new LeftToolBar_v321({
+							id : "leftToolBar",
+							map : map
+						});
+					} catch (err) {
+						console.log(" LayerControlJsTest::LeftToolBar_v321"
+								+ err);
+					}
+
+				});
+			});
+
+	function Bhimg(str) {
+
+		document.getElementById(str).src = "../js/map/assets/images/lefttoolbar/selecting_30px.bmp";
+
+	};
+	function Bhimg2(str) {
+
+		document.getElementById(str).src = require
+				.toUrl("../js/map/assets/images/lefttoolbar/selected_30px.bmp");
+
+	};
+
+	function click11() {
+		console.log(" LayerControlJsTest::LeftToolBar_v321 click");
+
+	};
+</script>
+
+
+
+</head>
+<body>
+
+	<div id="map"></div>
+	<div id="control">haha</div>
+	<!-- <div id="leftToolBar">aaa</div> -->
+	<!-- 	<div >
+		aa
+		<div style="position: relative;"  onclick="click11()" onmouseover="Bhimg('demo')"
+			onmouseout="Bhimg2('demo')">
+			<img id="demo"
+				src="../js/map/assets/images/lefttoolbar/selected_30px.bmp"
+				style="position: absolute; left: 0px; top: 0px; z-index: 1;" /> <img
+				src="../js/map/assets/images/lefttoolbar/enlarge_30px.png"
+				style="position: absolute; left: 0px; top: 0px; z-index: 2;" />
+		</div>
+		<div style="position: relative;" onmouseover="Bhimg('demo2')"
+			onmouseout="Bhimg2('demo2')">
+			<img id="demo2"
+				src="../js/map/assets/images/lefttoolbar/selected_30px.bmp"
+				style="position: absolute; left: 0px; top: 40px; z-index: 1;" /> <img
+				src="../js/map/assets/images/lefttoolbar/enlarge_30px.png"
+				style="position: absolute; left: 0px; top: 40px; z-index: 2;" />
+		</div>
+	</div> -->
+	
+	<div>
+		a<div style="position: relative;" onmouseover="Bhimg('enlarge')"
+			onmouseout="Bhimg2('enlarge')">
+			<img id="enlarge"
+				src="../js/map/assets/images/lefttoolbar/enlarge_30px.png"
+				style="position: absolute; left: 0px; top: 10px; z-index: 1;" /><img
+				src="../js/map/assets/images/lefttoolbar/enlarge_30px.png"
+				style="position: absolute; left: 0px; top: 10px; z-index: 2;" />
+		</div>
+		<div style="position: relative;" onmouseover="Bhimg('narrow')"
+			onmouseout="Bhimg2('narrow')">
+			<img id="narrow"
+				src="../js/map/assets/images/lefttoolbar/narrow_30px.png"
+				style="position: absolute; left: 0px; top: 50px; z-index: 1;" /><img
+				src="../js/map/assets/images/lefttoolbar/narrow_30px.png"
+				style="position: absolute; left: 0px; top: 50px; z-index: 2;" />
+		</div>
+	</div>
+
+
+
+</body>
+</html>
