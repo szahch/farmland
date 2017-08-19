@@ -1,11 +1,180 @@
-
+<!-- ArcGIS API for JavaScript 版本号3.21地图操作首页 -->
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+<meta name="viewport"
+	content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+
+<title>操作地图界面</title>
+
+<link rel="stylesheet" type="text/css"
+	href="http://192.168.2.101:8080/arcgis_js_api_v3.21/library/3.21/3.21/esri/css/esri.css" />
+<link rel="stylesheet"
+	href="http://192.168.2.101:8080/arcgis_js_api_v3.21/library/3.21/3.21/dijit/themes/tundra/tundra.css" />
+<link rel="stylesheet" href="/Farmland/css/map/main.css">
+<style>
+#title {
+	background-color: #325C84;
+	width: 100%;
+}
+</style>
+
+
+<script
+	src="http://192.168.2.101:8080/arcgis_js_api_v3.21/library/3.21/3.21/init.js"></script>
+<script type="text/javascript">
+	var dojoConfig = {
+		locale : 'en',
+		isDebug : true,
+		async : true,
+		packages : [ {
+			"name" : "map",
+			"location" : "/Farmland/js/map"
+		} ]
+	};
+</script>
+<script type="text/javascript">
+	var toc = null;
+	var map;
+	require(
+			[ "dojo/parser", "esri/map",
+					"esri/layers/ArcGISDynamicMapServiceLayer",
+					"esri/layers/FeatureLayer",
+					"esri/renderers/SimpleRenderer", "esri/Color",
+					"esri/symbols/SimpleFillSymbol",
+					"esri/symbols/SimpleLineSymbol",
+					"esri/symbols/SimpleMarkerSymbol",
+					"/Farmland/js/map/TocWidget_v3.21.js",
+					"../js/map/LayerControl_v3.21.js",
+					"../js/map/LeftToolBar_v3.21.js",
+					"dijit/layout/BorderContainer", "dijit/layout/ContentPane",
+					"dijit/layout/AccordionContainer", "dojo/domReady!" ],
+			function(parser, Map, ArcGISDynamicMapServiceLayer, FeatureLayer,
+					SimpleRenderer, Color, SimpleFillSymbol, SimpleLineSymbol,
+					SimpleMarkerSymbol, TocWidget, LayerControl_v321,
+					LeftToolBar_v321) {
+				console.log(location.pathname.replace(/\/[^/]+$/, "")
+						+ "/js/map");
+				parser.parse();
+
+				map = new Map("mapDiv", {
+					logo : false
+				});
+
+				var layer = new esri.layers.ArcGISDynamicMapServiceLayer(
+						"http://192.168.2.144:6080/arcgis/rest/services/Learning/GeoImage/MapServer",
+						{
+							id : '深圳三调影像'
+						});
+				map.addLayer(layer);
+
+				var featureLayer = new FeatureLayer(
+						"http://192.168.2.144:6080/arcgis/rest/services/Learning/Polygon3/MapServer/0",
+						{
+							mode : FeatureLayer.MODE_ONDEMAND,
+							outFields : [ "*" ]
+						});
+				var symbol = new SimpleMarkerSymbol(
+						SimpleMarkerSymbol.STYLE_SQUARE, 10,
+						new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+								new Color([ 255, 0, 0 ]), 1), new Color([ 0,
+								255, 0, 0.25 ]));
+				//简单渲染
+				var sr = new SimpleRenderer(symbol);
+				featureLayer.setRenderer(sr);
+
+				map.addLayer(featureLayer);
+
+				map.on("load", function() {
+
+					try {
+						var lc = new LayerControl_v321({
+							id : "layerControl",
+							map : map
+						});
+						//lc.showUI();
+						var ltb = new LeftToolBar_v321({
+							id : "leftToolBar",
+							map : map
+						});
+					} catch (err) {
+						console.log(" LayerControlJsTest::" + err);
+					}
+				});
+
+				/* 				function createWidget() {
+				 toc = new TocWidget();
+				 // toc.setTitle("图层控制器");
+				 toc.setMap(map);
+				 toc.startup();
+
+				 }
+
+				 layer.on("load", function() {
+				 console.log("layer.on(\"load\", function() ");
+				 createWidget();
+				 }); */
+
+			});
+				 
+				 
+			function Bhimg(str) {
+
+				document.getElementById(str).src = "../js/map/assets/images/lefttoolbar/selecting_30px.bmp";
+
+			};
+			function Bhimg2(str) {
+
+				document.getElementById(str).src = require
+						.toUrl("../js/map/assets/images/lefttoolbar/selected_30px.bmp");
+
+			};
+</script>
+
+
 </head>
 <body>
+	<div id="mainDiv" data-dojo-type="dijit/layout/BorderContainer"
+		data-dojo-props="gutters:true, design:'headline'">
 
+		<div data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'top'">
+			<div id="title">
+				<a style="padding: 20px;" href="/"><img
+					src="../js/map/assets/images/logo.png" alt="深圳市规划国土发展研究中心" /></a>
+			</div>
+		</div>
+		<div data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'left'"
+			style="background-color: #acb386; width: 40px;">
+
+			<div id="leftToolBar"></div>
+
+			<!-- <div id="toc" data-dojo-attach-point="tocNode" align="left"
+				style="width: 90%; filter: alpha(opacity = 90); -moz-opacity: 0.9; opacity: 0.9; background-color: white; overflow: auto; max-height: 400px;">
+			</div>
+			<br /> 活动图层： <select name="transparencyList" id="transparencyList"
+				data-dojo-attach-event="onchange:updateTransparencyLayer">
+				<option value="" selected></option>
+			</select> &nbsp;<br /> <br /> <input type="button"
+				data-dojo-attach-event="onclick:zoomToLayer" value="放大到该图层地理范围"
+				style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;">
+			<br /> <br /> 改变图层的透明度<br>
+			<div data-dojo-type="dijit/form/HorizontalSlider"
+				data-dojo-attach-point="slider"
+				data-dojo-attach-event="onChange:changeTransparency"
+				data-dojo-props="name:'slider',value:100,maximum:100,minimum:0,pageIncrement:100,showButtons:true,intermediateChanges:true,slideDuration:500"
+				style="width: 200px; height: 20px;"></div>   -->
+		</div>
+		<div id="mapDiv" data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'center'"></div>
+		<div id="layerControl" data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'right', splitter:'true'"
+			style="background-color: #acb386; width: 100px;"></div>
+		<div data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'bottom', splitter:'true'"
+			style="background-color: #b39b86; height: 50px;">bottom</div>
+	</div>
 </body>
 </html>
