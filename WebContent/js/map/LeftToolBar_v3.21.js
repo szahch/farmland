@@ -1,15 +1,14 @@
 /**
  * 页面左边工具栏 适用于ArcGIS API for JavaScript v3.21
  * 
- * 初始化方法 
- * var lc = new LeftToolBar_v321({ map:[esri/map], id:[the id for div]});
+ * 初始化方法 var lc = new LeftToolBar_v321({ map:[esri/map], id:[the id for div]});
  * 
  */
 
 define(
 		[ "dojo/_base/declare", "dojo/on", "dojo/dom", "dojo/query",
-				"dojo/mouse", "dojo/_base/lang" ],
-		function(declare, on, dom, query, mouse, lang) {
+				"dojo/mouse", "dojo/_base/lang", "esri/toolbars/navigation" ],
+		function(declare, on, dom, query, mouse, lang, Navigation) {
 			return declare(
 					"LeftToolBar_v321",
 					[],
@@ -73,6 +72,43 @@ define(
 
 						},
 
+						mapMouseDown : function() {
+
+							var select = this.simpleSelect;
+
+							select = select.substring(12, select.length - 4);
+
+							console.log(" LeftToolBar_v3.21::mapMouseDown."
+									+ select);							
+							
+							switch (select) {
+							case "arrow":
+								if (this.navToolbar == null) {
+									this.navToolbar = new Navigation(this.map);
+								}
+								console.log(" LeftToolBar_v3.21::mapMouseDown.111"
+										+ select);	
+								this.navToolbar.activate(Navigation.PAN);
+								break;
+							case "enlarge":
+								if (this.navToolbar == null) {
+									this.navToolbar = new Navigation(this.map);
+								}
+								console.log(" LeftToolBar_v3.21::mapMouseDown.111"
+										+ select);	
+								this.navToolbar.activate(Navigation.ZOOM_IN);
+								break;
+							case "narrow":
+								if (this.navToolbar == null) {
+									this.navToolbar = new Navigation(this.map);
+								}
+								console.log(" LeftToolBar_v3.21::mapMouseDown.2222"
+										+ select);	
+								this.navToolbar.activate(Navigation.ZOOM_OUT);
+								break;
+							}
+						},
+
 						/**
 						 * 初始化按钮
 						 */
@@ -87,9 +123,12 @@ define(
 							this.btnAbsolutePositionTop = this.firstBtnAbsolutePositionTop
 									- this.btnAbsolutePositionTopIncrease;
 
+							this.arrowButton();
+							
 							this.enlargeButton();
 
 							this.narrowButton();
+
 						},
 
 						/**
@@ -148,7 +187,8 @@ define(
 								img.style.visibility = "visible";
 							}
 							img.src = require.toUrl(this.selectedImgUrl);
-
+							
+							this.mapMouseDown();
 						},
 
 						/**
@@ -187,7 +227,17 @@ define(
 								img.style.visibility = "hidden";
 							}
 						},
+						
+						arrowButton : function() {
+							var narrowImgUrl = this.assetsAddress
+									+ "images/lefttoolbar/arrow_30px.png";
 
+							this
+									.initSingleSelctedButton(narrowImgUrl,
+											"arrow");
+
+						},
+						
 						/**
 						 * 放大按钮
 						 */
@@ -238,6 +288,5 @@ define(
 
 							this.ui += currentHtml;
 						}
-
 					});
 		});
