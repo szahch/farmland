@@ -23,6 +23,7 @@
 
 <script
 	src="http://192.168.2.101:8080/arcgis_js_api_v3.21/library/3.21/3.21/init.js"></script>
+	<script src="http://192.168.2.101:8080/Farmland/js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
 	var dojoConfig = {
 		locale : 'en',
@@ -40,28 +41,38 @@
 	require(
 			[ "dojo/parser", "esri/map",
 					"esri/layers/ArcGISDynamicMapServiceLayer",
-					"esri/layers/FeatureLayer",
-					"esri/InfoTemplate",
+					"esri/layers/FeatureLayer", "esri/InfoTemplate",
 					"esri/renderers/SimpleRenderer", "esri/Color",
 					"esri/symbols/SimpleFillSymbol",
 					"esri/symbols/SimpleLineSymbol",
-					"esri/symbols/SimpleMarkerSymbol",
+					"esri/symbols/SimpleMarkerSymbol", "esri/geometry/Extent",
+					"esri/SpatialReference",
 					"/Farmland/js/map/TocWidget_v3.21.js",
 					"../js/map/LayerControl_v3.21.js",
 					"../js/map/LeftToolBar_v3.21.js",
 					"dijit/layout/BorderContainer", "dijit/layout/ContentPane",
 					"dijit/layout/AccordionContainer", "dojo/domReady!" ],
-			function(parser, Map, ArcGISDynamicMapServiceLayer, FeatureLayer,InfoTemplate,
-					SimpleRenderer, Color, SimpleFillSymbol, SimpleLineSymbol,
-					SimpleMarkerSymbol, TocWidget, LayerControl_v321,
+			function(parser, Map, ArcGISDynamicMapServiceLayer, FeatureLayer,
+					InfoTemplate, SimpleRenderer, Color, SimpleFillSymbol,
+					SimpleLineSymbol, SimpleMarkerSymbol, Extent,
+					SpatialReference, TocWidget, LayerControl_v321,
 					LeftToolBar_v321) {
 				console.log(location.pathname.replace(/\/[^/]+$/, "")
 						+ "/js/map");
 				parser.parse();
 
+				var extent1 = new esri.geometry.Extent({
+					"xmin" : 3.8486722337572604E7,
+					"ymin" : 2480415.1499582035,
+					"xmax" : 3.858183009056279E7,
+					"ymax" : 2527370.5749582024,
+					"spatialReference" : {
+						"wkid" : 2362
+					}
+				});
 				map = new Map("mapDiv", {
-					logo : false
-
+					logo : false,
+					extent : extent1
 				});
 
 				var layer = new esri.layers.ArcGISDynamicMapServiceLayer(
@@ -71,66 +82,55 @@
 						});
 				map.addLayer(layer);
 
-				map.on("load", function() {
-					map.hideZoomSlider();
-					
-					  // map.setMapCursor("url(/Farmland/js/map/assets/images/lefttoolbar/enlarge_30px.cur),auto");  
-					
-					try {
-						
-		
-						//  地图控制器
-						var ltb = new LeftToolBar_v321({
-							id : "leftToolBar",
-							map : map
-						});
-						
-						// 加载图层控制器
-						var lc = new LayerControl_v321({
-							id : "layerControl",
-							map : map
-						});
-					} catch (err) {
-						console.log(" LayerControlJsTest::" + err);
-					}
-					
-					var infoTemplate = new InfoTemplate("Attributes", "${*}");
-					var featureLayer = new FeatureLayer(
-							"http://192.168.2.144:6080/arcgis/rest/services/Learning/Polygon3/MapServer/0",
-							{
-								mode : FeatureLayer.MODE_ONDEMAND,
-								outFields : [ "*" ],
-								infoTemplate: infoTemplate
-							});
-/* 					 var renderer = new SimpleRenderer(
-					          new SimpleFillSymbol("solid", null, new Color([255, 0, 0, 0.75]) // fuschia lakes!
-					        )); */
-					
-					 var sls = new SimpleLineSymbol(
-							    SimpleLineSymbol.STYLE_SOLID,
-							    new Color([255,0,0]),
-							    3
-							  );
-					 var renderer= new SimpleRenderer(sls);
-					 
-					 featureLayer.setRenderer(renderer);
-				     map.addLayer(featureLayer);
-				     map.infoWindow.resize(150, 105);
-					
-				});
+				map
+						.on(
+								"load",
+								function() {
+									map.hideZoomSlider();
+									// map.setMapCursor("url(/Farmland/js/map/assets/images/lefttoolbar/enlarge_30px.cur),auto");  
+									
+
+									var infoTemplate = new InfoTemplate(
+											"Attributes", "${*}");
+									var featureLayer = new FeatureLayer(
+											"http://192.168.2.144:6080/arcgis/rest/services/Learning/Polygon3/MapServer/0",
+											{
+												mode : FeatureLayer.MODE_ONDEMAND,
+												outFields : [ "*" ],
+												infoTemplate : infoTemplate
+											});
+									/* 					 var renderer = new SimpleRenderer(
+									 new SimpleFillSymbol("solid", null, new Color([255, 0, 0, 0.75]) // fuschia lakes!
+									 )); */
+
+									var sls = new SimpleLineSymbol(
+											SimpleLineSymbol.STYLE_SOLID,
+											new Color([ 255, 0, 0 ]), 3);
+									var renderer = new SimpleRenderer(sls);
+
+									featureLayer.setRenderer(renderer);
+									map.addLayer(featureLayer);
+									map.infoWindow.resize(150, 105);
+									
+									try {
+										//  地图控制器
+										var ltb = new LeftToolBar_v321({
+											id : "leftToolBar",
+											map : map
+										});
+
+										// 加载图层控制器
+										var lc = new LayerControl_v321({
+											id : "layerControl",
+											map : map
+										});
+									} catch (err) {
+										console.log(" LayerControlJsTest::"
+												+ err);
+									}
+								});
 			});
 
-	function Bhimg(str) {
-
-		document.getElementById(str).src = "../js/map/assets/images/lefttoolbar/selecting_30px.bmp";
-
-	};
-	function Bhimg2(str) {
-
-		document.getElementById(str).src = require
-				.toUrl("../js/map/assets/images/lefttoolbar/selected_30px.bmp");
-
-	};
 </script>
 
 

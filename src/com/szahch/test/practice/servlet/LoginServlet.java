@@ -1,11 +1,9 @@
-package practice.servlet;
-
+package com.szahch.test.practice.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -14,36 +12,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-//ÓÃ»§µÇÂ½servlet
+//ç”¨æˆ·ç™»é™†servlet
 @WebServlet("/practice/servlet/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
-	 public LoginServlet() {
-	        super();
-	        // TODO Auto-generated constructor stub
-	    }
-	
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public LoginServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		List<User> list = DB.getAll();
 		for (User user : list) {
-			// Èç¹ûÓÃ»§µÇÂ¼³É¹¦
-			if (user.getUsername().equals(username)
-					&& user.getPassword().equals(password)) {
+			// å¦‚æœç”¨æˆ·ç™»å½•æˆåŠŸ
+			if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
 				HttpSession session = request.getSession();
-				// ÊÖ¶¯ÉèÖÃsessionµÄÓĞĞ§ÆÚÎª30·ÖÖÓ
+				// æ‰‹åŠ¨è®¾ç½®sessionçš„æœ‰æ•ˆæœŸä¸º30åˆ†é’Ÿ
 				String sessionId = session.getId();
 				Cookie cookie = new Cookie("JSESSIONID", sessionId);
 				cookie.setMaxAge(60);
 				cookie.setPath(request.getContextPath());
 				response.addCookie(cookie);
-				// µÇÂ¼³É¹¦ºóÒª´æÈëÓÃ»§µÄµÇÂ¼×´Ì¬£¬keyÊÇÓÃ»§¶ÔÏóµÄStringĞÎÊ½value¾ÍÊÇÓÃ»§¶ÔÏó(model)£¡£¡±ğµÄÒ³ÃæÓ¦¸ÃÄÜÓÃµ½
+				// ç™»å½•æˆåŠŸåè¦å­˜å…¥ç”¨æˆ·çš„ç™»å½•çŠ¶æ€ï¼Œkeyæ˜¯ç”¨æˆ·å¯¹è±¡çš„Stringå½¢å¼valueå°±æ˜¯ç”¨æˆ·å¯¹è±¡(model)ï¼ï¼åˆ«çš„é¡µé¢åº”è¯¥èƒ½ç”¨åˆ°
 				session.setAttribute("user", user);
-				// ÖØ¶¨Ïòµ½Ê×Ò³£¬URLÖØĞ´·½Ê½
-				String url = response.encodeRedirectURL(request
-						.getContextPath() + "/practice/index.jsp");
+				// é‡å®šå‘åˆ°é¦–é¡µï¼ŒURLé‡å†™æ–¹å¼
+				String url = response.encodeRedirectURL(request.getContextPath() + "/practice/index.jsp");
 				response.sendRedirect(url);
 				return;
 			}
@@ -52,17 +47,16 @@ public class LoginServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Content-type", "text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		out.print("ÓÃ»§Ãû»òÃÜÂë´íÎó");
+		out.print("ç”¨æˆ·åæˆ–å¯†ç é”™è¯¯");
 	}
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
 
 }
 
-// Ä£Äâ´æ´¢ÓÃ»§µÄÊı¾İ¿â
+// æ¨¡æ‹Ÿå­˜å‚¨ç”¨æˆ·çš„æ•°æ®åº“
 class DB {
 	private static List<User> list = new ArrayList<User>();
 	static {
@@ -75,5 +69,3 @@ class DB {
 		return list;
 	}
 }
-
-

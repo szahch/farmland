@@ -7,8 +7,9 @@
 
 define(
 		[ "dojo/_base/declare", "dojo/on", "dojo/dom", "dojo/query",
-				"dojo/mouse", "dojo/_base/lang", "esri/toolbars/navigation" ],
-		function(declare, on, dom, query, mouse, lang, Navigation) {
+				"dojo/mouse", "dojo/_base/lang", "esri/toolbars/navigation",
+				"esri/geometry/Extent", ],
+		function(declare, on, dom, query, mouse, lang, Navigation, Extent) {
 			return declare(
 					"LeftToolBar_v321",
 					[],
@@ -38,12 +39,18 @@ define(
 
 							this.id = this.param.id;
 
+							this.fullExtent = this.param.fullExtent;
+
 							if (this.map === null || this.id === null) {
 								console.error("Map or Id is Null.");
 								throw "Map or Id is Null.";
 							}
 
 							this.initLayout();
+						},
+
+						setFullExtent : function(extent) {
+							this.fullExtent = extent;
 						},
 
 						initLayout : function() {
@@ -62,6 +69,12 @@ define(
 							this.selectingImgUrl = this.assetsAddress
 									+ "images/lefttoolbar/selecting_30px.png";
 
+							this.simpleSelectTag = "SimpleSelect";
+
+							this.simpleClickTag = "Simple_Click";
+
+							this.multiSelectTag = "Multi_Select";
+
 							this.initBtn();
 
 							console.log(" LeftToolBar_v3.21::start." + this.ui);
@@ -70,43 +83,7 @@ define(
 
 							this.registerEvents();
 
-						},
-
-						mapMouseDown : function() {
-
-							var select = this.simpleSelect;
-
-							select = select.substring(12, select.length - 4);
-
-							console.log(" LeftToolBar_v3.21::mapMouseDown."
-									+ select);							
-							
-							switch (select) {
-							case "arrow":
-								if (this.navToolbar == null) {
-									this.navToolbar = new Navigation(this.map);
-								}
-								console.log(" LeftToolBar_v3.21::mapMouseDown.111"
-										+ select);	
-								this.navToolbar.activate(Navigation.PAN);
-								break;
-							case "enlarge":
-								if (this.navToolbar == null) {
-									this.navToolbar = new Navigation(this.map);
-								}
-								console.log(" LeftToolBar_v3.21::mapMouseDown.111"
-										+ select);	
-								this.navToolbar.activate(Navigation.ZOOM_IN);
-								break;
-							case "narrow":
-								if (this.navToolbar == null) {
-									this.navToolbar = new Navigation(this.map);
-								}
-								console.log(" LeftToolBar_v3.21::mapMouseDown.2222"
-										+ select);	
-								this.navToolbar.activate(Navigation.ZOOM_OUT);
-								break;
-							}
+							this.singleSelect("arrow");
 						},
 
 						/**
@@ -124,11 +101,12 @@ define(
 									- this.btnAbsolutePositionTopIncrease;
 
 							this.arrowButton();
-							
+
 							this.enlargeButton();
 
 							this.narrowButton();
 
+							this.fullExtentButton();
 						},
 
 						/**
@@ -137,19 +115,18 @@ define(
 						registerEvents : function() {
 
 							var imageChildren = query("#" + this.id + " > div");
-							console.log(" LeftToolBar_v3.21::connectEvent."
+							console.debug(" LeftToolBar_v3.21::connectEvent."
 									+ "imageChildren = " + imageChildren.length
 									+ imageChildren[0].id);
 
 							for (var i = 0; i < imageChildren.length; i++) {
-								on(imageChildren[i], "click", lang.hitch(this,
-										"clickEvents"));
+								on(imageChildren[i], "mousedown", lang.hitch(
+										this, "clickEvents"));
 								on(imageChildren[i], mouse.enter, lang.hitch(
 										this, "enterEvents"));
 								on(imageChildren[i], mouse.leave, lang.hitch(
 										this, "leaveEvents"));
 							}
-
 						},
 
 						/**
@@ -157,38 +134,122 @@ define(
 						 */
 						clickEvents : function(evt) {
 							var divId = evt.currentTarget.id;
+							var clickType = divId.substring(12, 24);
+							var divTag = divId.substring(25, divId.length - 4);
+							var selectedImg = divId.substring(0,
+									divId.length - 3)
+									+ "SelectedImg";
 
-							if (divId === this.simpleSelect) {
+							// 控制台输出
+							console
+									.debug(" LeftToolBar_v3.21::clickEvents. clickType="
+											+ clickType
+											+ ", divTag="
+											+ divTag
+											+ ", selectedImg=" + selectedImg);
+
+							switch (clickType) {
+							// 单选按钮响应
+							case this.simpleSelectTag:
+								this.singleSelect(divTag);
+								return;
+								break;
+
+							// 单击按钮响应
+							case this.simpleClickTag:
+								dom.byId(selectedImg).style.visibility = "visible";
+								// 鼠标弹起时取消选中
+								$("#" + divId)
+										.on(
+												"mouseup",
+												function() {
+													dom.byId(selectedImg).style.visibility = "hidden";
+												});
+								this.singleClick(divTag);
+								return;
+								break;
+							case this.multiSelectTag:
+								break;
+							}
+						},
+
+						/**
+						 * 单选按钮
+						 */
+						singleSelect : function(tag) {
+
+							if (tag === this.simpleSelect) {
 								return;
 							}
 
-							if (this.simpleSelect !== "") {
+							// 清除所有已经选择
+							var simpleSelectdiv = query("#" + this.id
+									+ " > div");
 
-								var historyDiv = this.simpleSelect;
+							console.debug(simpleSelectdiv[1].id);
+							for (var i = 0; i < simpleSelectdiv.length; i++) {
 
-								var historySelectedImg = dom.byId(historyDiv
-										.substring(0, historyDiv.length - 3)
-										+ "ActiveImg");
-
-								if (historySelectedImg.style.visibility === "visible") {
-									historySelectedImg.style.visibility = "hidden";
+								if (simpleSelectdiv[i].id.substring(12, 24) === this.simpleSelectTag) {
+									dom
+											.byId((simpleSelectdiv[i].id
+													.substring(
+															0,
+															simpleSelectdiv[i].id.length - 3) + "SelectedImg")).style.visibility = "hidden";
 								}
 							}
 
-							this.simpleSelect = divId;
+							(dom.byId("LeftToolBar_" + this.simpleSelectTag
+									+ "_" + tag + "_SelectedImg")).style.visibility = "visible";
 
-							var imgId = divId.substring(0, divId.length - 3)
-									+ "ActiveImg";
-							console
-									.log(" LeftToolBar_v3.21::clickEvents. imgId="
-											+ imgId);
-							var img = dom.byId(imgId);
-							if (img.style.visibility === "hidden") {
-								img.style.visibility = "visible";
+							switch (tag) {
+							case "arrow":
+								if (this.navToolbar == null) {
+									this.navToolbar = new Navigation(this.map);
+								}
+								this.navToolbar.activate(Navigation.PAN);
+								break;
+							case "enlarge":
+								if (this.navToolbar == null) {
+									this.navToolbar = new Navigation(this.map);
+								}
+								this.navToolbar.activate(Navigation.ZOOM_IN);
+								break;
+							case "narrow":
+								if (this.navToolbar == null) {
+									this.navToolbar = new Navigation(this.map);
+								}
+								this.navToolbar.activate(Navigation.ZOOM_OUT);
+
+								break;
 							}
-							img.src = require.toUrl(this.selectedImgUrl);
-							
-							this.mapMouseDown();
+
+							this.simpleSelect = tag;
+						},
+
+						/**
+						 * 单击按钮
+						 */
+						singleClick : function(tag) {
+							switch (tag) {
+							case "fullExtent":
+								if (this.fullExtent == null) {
+									this.fullExtent = new esri.geometry.Extent(
+											{
+												// TODO 深圳三调地址
+												"xmin" : 3.8486722337572604E7,
+												"ymin" : 2480415.1499582035,
+												"xmax" : 3.858183009056279E7,
+												"ymax" : 2527370.5749582024,
+												"spatialReference" : {
+													"wkid" : 2362
+												}
+											});
+								}
+
+								this.map.setExtent(this.fullExtent);
+								break;
+							}
+
 						},
 
 						/**
@@ -197,17 +258,18 @@ define(
 						enterEvents : function(evt) {
 							var imgId = evt.currentTarget.id;
 							imgId = imgId.substring(0, imgId.length - 3)
-									+ "ActiveImg";
+									+ "SelectingImg";
 							console
-									.log(" LeftToolBar_v3.21::enterEvents. imgId="
+									.debug(" LeftToolBar_v3.21::enterEvents. imgId="
 											+ imgId);
 							var img = dom.byId(imgId);
 							if (img.style.visibility === "hidden") {
 								img.style.visibility = "visible";
-								img.src = require.toUrl(this.selectingImgUrl);
+								// img.src =
+								// require.toUrl(this.selectingImgUrl);
 							} else {
 								console
-										.log(" LeftToolBar_v3.21::enterEvents. imgId="
+										.debug(" LeftToolBar_v3.21::enterEvents. imgId="
 												+ imgId + " is visible");
 							}
 						},
@@ -221,23 +283,20 @@ define(
 								return;
 							}
 							var imgId = divId.substring(0, divId.length - 3)
-									+ "ActiveImg";
+									+ "SelectingImg";
 							var img = dom.byId(imgId);
 							if (img.style.visibility === "visible") {
 								img.style.visibility = "hidden";
 							}
 						},
-						
+
 						arrowButton : function() {
 							var narrowImgUrl = this.assetsAddress
 									+ "images/lefttoolbar/arrow_30px.png";
 
-							this
-									.initSingleSelctedButton(narrowImgUrl,
-											"arrow");
-
+							this.initSingleSelctedButton(narrowImgUrl, "arrow");
 						},
-						
+
 						/**
 						 * 放大按钮
 						 */
@@ -256,7 +315,14 @@ define(
 							this
 									.initSingleSelctedButton(narrowImgUrl,
 											"narrow");
+						},
 
+						// 显示全图
+						fullExtentButton : function() {
+							var fullExtentImgUrl = this.assetsAddress
+									+ "images/lefttoolbar/full_extent_30px.png";
+							this.initSingleClickButton(fullExtentImgUrl,
+									"fullExtent");
 						},
 
 						/**
@@ -264,29 +330,83 @@ define(
 						 */
 						initSingleSelctedButton : function(imgUrl, tag) {
 
-							tag = "LeftToolBar_" + tag + "_";
+							tag = "LeftToolBar_" + this.simpleSelectTag + "_"
+									+ tag + "_";
 
 							this.btnAbsolutePositionTop += this.btnAbsolutePositionTopIncrease;
 
 							var currentHtml = "<div id=\"" + tag
 									+ "Div\" style=\"position: relative;\" "
 									+ " ondragstart=\"return false;\" >";
+							// 鼠标移动到图标上响应动画
 							currentHtml += "<img id=\""
 									+ tag
-									+ "ActiveImg\" src=\""
+									+ "SelectingImg\" src=\""
 									+ this.selectingImgUrl
 									+ "\" style=\" visibility:hidden; position: absolute; left: "
 									+ this.btnAbsolutePositionLeft
 									+ "px; top: " + this.btnAbsolutePositionTop
 									+ "px; z-index: 1; \"/>";
+							// 鼠标点击响应动画
+							currentHtml += "<img id=\""
+									+ tag
+									+ "SelectedImg\" src=\""
+									+ this.selectedImgUrl
+									+ "\" style=\" visibility:hidden; position: absolute; left: "
+									+ this.btnAbsolutePositionLeft
+									+ "px; top: " + this.btnAbsolutePositionTop
+									+ "px; z-index: 2; \"/>";
+							// 按钮图标
 							currentHtml += "<img src=\"" + imgUrl
 									+ "\" style=\" position: absolute; left: "
 									+ this.btnAbsolutePositionLeft
 									+ "px; top: " + this.btnAbsolutePositionTop
-									+ "px; z-index: 2; \" />";
+									+ "px; z-index: 3; \" />";
+							currentHtml += "</div>";
+
+							this.ui += currentHtml;
+						},
+
+						/**
+						 * 单击按钮
+						 */
+						initSingleClickButton : function(imgUrl, tag) {
+							tag = "LeftToolBar_" + this.simpleClickTag + "_"
+									+ tag + "_";
+
+							this.btnAbsolutePositionTop += this.btnAbsolutePositionTopIncrease;
+
+							var currentHtml = "<div id=\"" + tag
+									+ "Div\" style=\"position: relative;\" "
+									+ " ondragstart=\"return false;\" >";
+							// 鼠标移动到图标上响应动画
+							currentHtml += "<img id=\""
+									+ tag
+									+ "SelectingImg\" src=\""
+									+ this.selectingImgUrl
+									+ "\" style=\" visibility:hidden; position: absolute; left: "
+									+ this.btnAbsolutePositionLeft
+									+ "px; top: " + this.btnAbsolutePositionTop
+									+ "px; z-index: 1; \"/>";
+							// 鼠标点击响应动画
+							currentHtml += "<img id=\""
+									+ tag
+									+ "SelectedImg\" src=\""
+									+ this.selectedImgUrl
+									+ "\" style=\" visibility:hidden; position: absolute; left: "
+									+ this.btnAbsolutePositionLeft
+									+ "px; top: " + this.btnAbsolutePositionTop
+									+ "px; z-index: 2; \"/>";
+							// 按钮图标
+							currentHtml += "<img src=\"" + imgUrl
+									+ "\" style=\" position: absolute; left: "
+									+ this.btnAbsolutePositionLeft
+									+ "px; top: " + this.btnAbsolutePositionTop
+									+ "px; z-index: 3; \" />";
 							currentHtml += "</div>";
 
 							this.ui += currentHtml;
 						}
+
 					});
 		});

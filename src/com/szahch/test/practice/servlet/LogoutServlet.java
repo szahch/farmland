@@ -1,4 +1,4 @@
-package practice.servlet;
+package com.szahch.test.practice.servlet;
 
 import java.io.IOException;  
 import java.io.PrintWriter;  
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
  * Servlet implementation class LogoutServlet
  */
 
-//×¢Ïúservlet  
+//æ³¨é”€servlet  
 @WebServlet("/practice/servlet/LogoutServlet")
 public class LogoutServlet extends HttpServlet {  
 	 public LogoutServlet() {
@@ -28,15 +28,15 @@ public class LogoutServlet extends HttpServlet {
         PrintWriter out = response.getWriter();  
         HttpSession session = request.getSession(false);  
         if (session == null) {  
-            // Ã»µÇÂ¼£¬ÖØ¶¨Ïòµ½Ê×Ò³  
+            // æ²¡ç™»å½•ï¼Œé‡å®šå‘åˆ°é¦–é¡µ  
             String url = response.encodeRedirectURL(request.getContextPath()  
                     + "/practice/index.jsp");  
             response.sendRedirect(url);  
             return;  
         }  
-        // ´ÓsessionÖĞÒÆ³ıµÇÂ¼×´Ì¬  
+        // ä»sessionä¸­ç§»é™¤ç™»å½•çŠ¶æ€  
         session.removeAttribute("user");  
-        // ÖØ¶¨Ïòµ½Ê×Ò³£¬URLÖØĞ´·½Ê½  
+        // é‡å®šå‘åˆ°é¦–é¡µï¼ŒURLé‡å†™æ–¹å¼  
         String url = response.encodeRedirectURL(request.getContextPath()  
                 + "/practice/index.jsp");  
         response.sendRedirect(url);  

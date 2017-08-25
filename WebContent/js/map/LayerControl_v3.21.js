@@ -1,8 +1,7 @@
 /**
  * 图层控制器 适用于ArcGIS API for JavaScript v3.21
  * 
- * 初始化方法 
- * var lc = new LayerControl_v321({ map:[esri/map], id:[the id for div]});
+ * 初始化方法 var lc = new LayerControl_v321({ map:[esri/map], id:[the id for div]});
  * 
  */
 define(
@@ -14,7 +13,6 @@ define(
 					"LayerControl_v321",
 					[],
 					{
-
 						_extend : null,
 
 						// 还需要加载的图层的数量，用于控制是否还需要进行初始化操作
@@ -51,8 +49,6 @@ define(
 						 * 初始化图层
 						 */
 						initLayout : function() {
-							console.log(" LayerControl_v3.21::initLayout."
-									+ this.layerNumNeedtoLoad);
 
 							this.doc = document.getElementById(this.id);
 
@@ -63,6 +59,21 @@ define(
 							}
 
 							this.layerNumNeedtoLoad = this.map.layerIds.length;
+
+							console.debug(" LayerControl_v3.21::initLayout."
+									+ "layerNumNeedtoLoad="
+									+ this.layerNumNeedtoLoad + ", layerIds="
+									+ this.map.layerIds[0]
+									+ ", graphicsLayerIds="
+									+ this.map.graphicsLayerIds[0]);
+
+							for (var i = 0; i < this.map.graphicsLayerIds.length; i++) {
+								var layer = this.map
+										.getLayer(this.map.graphicsLayerIds[i]);
+								console.debug(layer);
+
+								this.addToTOC(layer);
+							}
 
 							for (var i = 0; i < this.map.layerIds.length; i++) {
 								var layer = this.map
@@ -91,6 +102,9 @@ define(
 						},
 
 						buildLayerList : function(layer) {
+							console.debug(" LayerControl_v3.21::buildLayerList="+layer.id);
+							
+							
 							var currentLayer = layer;
 							var currentHTML = "";
 							var expandImageUrl = require
@@ -159,11 +173,9 @@ define(
 							console.log(" LayerControl_v3.21::connectEvent.");
 							// 加>表示选择直接子元素
 							var imageChildren = query("#toc > img");
-							console
-									.log(" LayerControl_v3.21::connectEvent."
-											+ "imageChildren = "
-											+ imageChildren.length+
-											imageChildren[0].id);
+							console.log(" LayerControl_v3.21::connectEvent."
+									+ "imageChildren = " + imageChildren.length
+									+ imageChildren[0].id);
 
 							for (var i = 0; i < imageChildren.length; i++) {
 								on(imageChildren[i], "click", lang.hitch(this,
@@ -181,8 +193,7 @@ define(
 						 * 展开图层列表
 						 */
 						toggleLayer : function(evt) {
-							
-							
+
 							var id = evt.currentTarget.id;
 							id = id.substring(0, id.length - 4);
 							console.log(id);
