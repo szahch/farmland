@@ -1,4 +1,4 @@
-package practice.servlet;
+package com.szahch.test.practice.servlet;
 
 public class User {
 	private String Username;
