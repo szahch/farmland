@@ -19,15 +19,15 @@
 
 
 <script>
-	var dojoConfig = {
+	var dojoConfig ={
 		locale : 'en',
 		isDebug : true,
 		async : true,
-		packages : [ {
+		packages:[{
 			"name" : "map",
-			"location" : location.pathname.replace(/\/[^/]+$/, "") + "/js/map"
-		} ]
-	};
+			"location" : location.pathname.replace(/\/[^/]+$/, "") + "\/js\/map"
+			}]
+		};
 </script>
 
 <script>
@@ -41,9 +41,9 @@
 					"dijit/layout/AccordionContainer", "dojo/domReady!" ],
 			function(parser, Map, MapView, MapImageLayer, FeatureLayer, Legend,
 					TocWidget) {
-
+				
 				parser.parse();
-
+				
 				var tileLayer = new MapImageLayer(
 						{
 							id : "三调影像",
