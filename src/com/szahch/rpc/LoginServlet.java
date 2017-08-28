@@ -1,9 +1,10 @@
-package com.szahch.test.practice.servlet;
+package com.szahch.rpc;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -12,9 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.szahch.test.practice.servlet.User;
+
 //用户登陆servlet
-@WebServlet("/practice/servlet/LoginServlet")
+@WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public LoginServlet() {
 		super();
@@ -24,6 +32,7 @@ public class LoginServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		
 		List<User> list = DB.getAll();
 		for (User user : list) {
 			// 如果用户登录成功
@@ -32,13 +41,13 @@ public class LoginServlet extends HttpServlet {
 				// 手动设置session的有效期为30分钟
 				String sessionId = session.getId();
 				Cookie cookie = new Cookie("JSESSIONID", sessionId);
-				cookie.setMaxAge(60);
+				cookie.setMaxAge(60*30);
 				cookie.setPath(request.getContextPath());
 				response.addCookie(cookie);
 				// 登录成功后要存入用户的登录状态，key是用户对象的String形式value就是用户对象(model)！！别的页面应该能用到
 				session.setAttribute("user", user);
 				// 重定向到首页，URL重写方式
-				String url = response.encodeRedirectURL(request.getContextPath() + "/practice/index.jsp");
+				String url = response.encodeRedirectURL(request.getContextPath() + "/index.html");
 				response.sendRedirect(url);
 				return;
 			}

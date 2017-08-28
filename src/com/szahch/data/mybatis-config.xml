@@ -8,11 +8,15 @@
 			<dataSource type="POOLED">
 				<property name="driver" value="oracle.jdbc.driver.OracleDriver" />
 				<property name="url"
-					value="jdbc:oracle:thin:@192.168.2.144:1521:arcgis" />
-				<property name="username" value="sys" />
+					value="jdbc:oracle:thin:@127.0.0.1:1521:arcgis" />
+				<property name="username" value="system" />
 				<property name="password" value="arcgis" />
 			</dataSource>
 		</environment>
 	</environments>
-	
+
+	<mappers>
+		<mapper resource="com/szahch/data/model/UserMapper.xml"></mapper>
+	</mappers>
+
 </configuration>
