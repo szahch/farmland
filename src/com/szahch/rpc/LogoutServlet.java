@@ -1,4 +1,4 @@
-package com.szahch.test.practice.servlet;
+package com.szahch.rpc;
 
 import java.io.IOException;  
 import java.io.PrintWriter;  
@@ -15,9 +15,14 @@ import javax.servlet.http.HttpSession;
  */
 
 //注销servlet  
-@WebServlet("/practice/servlet/LogoutServlet")
+@WebServlet("/LogoutServlet")
 public class LogoutServlet extends HttpServlet {  
-	 public LogoutServlet() {
+	 /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public LogoutServlet() {
 	        super();
 	        // TODO Auto-generated constructor stub
 	    }

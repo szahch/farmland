@@ -2,6 +2,7 @@
     <wb-module deploy-name="Farmland">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/WEB-INF/lib/spring"/>
         <property name="context-root" value="Farmland"/>
         <property name="java-output-path" value="/Farmland/build/classes"/>
     </wb-module>
