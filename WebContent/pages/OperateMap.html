@@ -1,124 +1,36 @@
+<!-- ArcGIS API for JavaScript 版本号3.21地图操作首页 -->
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
 <meta name="viewport"
 	content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+
 <title>操作地图界面</title>
 
+<!-- CSS start-->
+<link rel="stylesheet" type="text/css"
+	href="http://192.168.2.101:8080/arcgis_js_api_v3.21/library/3.21/3.21/esri/css/esri.css" />
 <link rel="stylesheet"
-	href="http://192.168.2.101:8080/arcgis_js_api/library/4.4/esri/css/main.css">
+	href="http://192.168.2.101:8080/arcgis_js_api_v3.21/library/3.21/3.21/dijit/themes/tundra/tundra.css" />
 <link rel="stylesheet"
-	href="http://192.168.2.101:8080/arcgis_js_api/library/4.4/dijit/themes/tundra/tundra.css" />
+	href="https://js.arcgis.com/3.21/dijit/themes/claro/claro.css">
 <link rel="stylesheet" href="/Farmland/css/map/main.css">
-
-<script src="https://js.arcgis.com/4.4/"></script>
-<!--<script src="http://192.168.2.101:8080/arcgis_js_api/library/4.4/init.js"></script>-->
 <style>
+#title {
+	background-color: #325C84;
+	width: 100%;
+}
 </style>
+<!-- CSS end -->
 
+<!-- JavaScript start -->
+<script
+	src="http://192.168.2.101:8080/arcgis_js_api_v3.21/library/3.21/3.21/init.js"></script>
+<script src="http://192.168.2.101:8080/Farmland/js/jquery-3.2.1.min.js"></script>
+<script src="../js/OperateMap.js"></script>
+<!-- JavaScript end -->
 
-<script>
-	var dojoConfig ={
-		locale : 'en',
-		isDebug : true,
-		async : true,
-		packages:[{
-			"name" : "map",
-			"location" : location.pathname.replace(/\/[^/]+$/, "") + "\/js\/map"
-			}]
-		};
-</script>
-
-<script>
-	var toc = null;
-
-	require(
-			[ "dojo/parser", "esri/Map", "esri/views/MapView",
-					"esri/layers/MapImageLayer", "esri/layers/FeatureLayer",
-					"esri/widgets/Legend", "/Farmland/js/map/TocWidget.js",
-					"dijit/layout/BorderContainer", "dijit/layout/ContentPane",
-					"dijit/layout/AccordionContainer", "dojo/domReady!" ],
-			function(parser, Map, MapView, MapImageLayer, FeatureLayer, Legend,
-					TocWidget) {
-				
-				parser.parse();
-				
-				var tileLayer = new MapImageLayer(
-						{
-							id : "三调影像",
-							url : "http://192.168.2.144:6080/arcgis/rest/services/Learning/GeoImage/MapServer",
-							sublayers : [ {
-								id : 4,
-								visible : true
-							}, {
-								id : 3,
-								visible : true
-							}, {
-								id : 2,
-								visible : true
-							}, {
-								id : 1,
-								visible : true
-							}, {
-								id : 0,
-								visible : true
-							} ]
-						});
-
-				var tileLayer2 = new FeatureLayer(
-						{
-							url : "http://192.168.2.144:6080/arcgis/rest/services/Learning/Polygon3/MapServer/0",
-						});
-
-				var map = new Map({
-					// basemap : "streets",
-					layers : [ tileLayer, tileLayer2 ],
-					logo : false,
-					slider : false
-				});
-
-				var view = new MapView({
-					container : "mapDiv",
-					map : map,
-				});
-
-				view.center = [ 114.06667, 22.61667 ];
-				view.zoom = 10;
-
-				view.then(function() {
-
-					console.log("地图加载完成");
-					var legend = new Legend({
-						container : "toc1",
-						view : view,
-						layerInfos : [ {
-							layer : tileLayer2,
-							title : "图例"
-						} ]
-					});
-
-					// Add widget to the bottom right corner of the view
-					// view.ui.add(legend, "bottom-right");
-
-					aa();
-				},
-						function(error) {
-							console.log(
-									"The view's resources failed to load: ",
-									error);
-						});
-
-				function aa() {
-					console.log("aa");
-					toc = new TocWidget();
-					console.log("aa end" + toc);
-					toc.setMap(map);
-					toc.startup();
-
-				}
-			});
-</script>
 
 </head>
 <body>
@@ -127,38 +39,30 @@
 		data-dojo-props="gutters:true, design:'headline'">
 
 		<div data-dojo-type="dijit/layout/ContentPane"
-			data-dojo-props="region:'top'" style="height: 5%;">
-			耕地现状动态监测信息管理系统</div>
-		<div data-dojo-type="dijit/layout/ContentPane"
-			data-dojo-props="region:'left', splitter:'true'"
-			style="background-color: #acb386; width: 200px;">
-
-			<div id="toc" data-dojo-attach-point="tocNode" align="left"
-				style="width: 90%; filter: alpha(opacity = 90); -moz-opacity: 0.9; opacity: 0.9; background-color: white; overflow: auto; max-height: 400px;">
+			data-dojo-props="region:'top'">
+			<div id="title">
+				<a style="padding: 20px;" href="/"><img
+					src="../js/map/assets/images/logo.png" alt="深圳市规划国土发展研究中心" /></a>
 			</div>
-			<br /> 活动图层： <select name="transparencyList" id="transparencyList"
-				data-dojo-attach-event="onchange:updateTransparencyLayer">
-				<option value="" selected></option>
-			</select> &nbsp;<br /> <br /> <input type="button"
-				data-dojo-attach-event="onclick:zoomToLayer" value="放大到该图层地理范围"
-				style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;">
-			<br /> <br /> 改变图层的透明度<br>
-			<div data-dojo-type="dijit/form/HorizontalSlider"
-				data-dojo-attach-point="slider"
-				data-dojo-attach-event="onChange:changeTransparency"
-				data-dojo-props="name:'slider',value:100,maximum:100,minimum:0,pageIncrement:100,showButtons:true,intermediateChanges:true,slideDuration:500"
-				style="width: 200px; height: 20px;"></div>
-
 		</div>
-		<div id="mapDiv" data-dojo-type="dijit/layout/ContentPane"
-			data-dojo-props="region:'center'"></div>
 		<div data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'left'"
+			style="background-color: #acb386; width: 40px;">
+			<div id="leftToolBar"></div>
+		</div>
+		<div data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="region:'center'">
+			<div id="mapDiv"></div>
+		</div>
+		<div id="layerControl" data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="region:'right', splitter:'true'"
-			style="background-color: #acb386; width: 100px;">right</div>
+			style="background-color: #acb386; width: 100px;"></div>
 		<div data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="region:'bottom', splitter:'true'"
-			style="background-color: #b39b86; height: 50px;">bottom</div>
-	</div>
+			style="background-color: #b39b86; height: 100px;">
 
+			<!-- <div id="featureTable"></div> -->
+		</div>
+	</div>
 </body>
 </html>

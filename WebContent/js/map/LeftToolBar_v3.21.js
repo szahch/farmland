@@ -8,8 +8,9 @@
 define(
 		[ "dojo/_base/declare", "dojo/on", "dojo/dom", "dojo/query",
 				"dojo/mouse", "dojo/_base/lang", "esri/toolbars/navigation",
-				"esri/geometry/Extent", ],
-		function(declare, on, dom, query, mouse, lang, Navigation, Extent) {
+				"esri/geometry/Extent", "esri/dijit/FeatureTable" ],
+		function(declare, on, dom, query, mouse, lang, Navigation, Extent,
+				FeatureTable) {
 			return declare(
 					"LeftToolBar_v321",
 					[],
@@ -107,6 +108,8 @@ define(
 							this.narrowButton();
 
 							this.fullExtentButton();
+
+							// this.showFeatureTableButton();
 						},
 
 						/**
@@ -169,6 +172,14 @@ define(
 								return;
 								break;
 							case this.multiSelectTag:
+								var img = dom.byId(selectedImg);
+								if (img.style.visibility === "hidden") {
+									img.style.visibility = "visible";
+									this.multiSelect(divTag, "selected");
+								} else {
+									img.style.visibility = "hidden";
+									this.multiSelect(divTag, "cancel");
+								}
 								break;
 							}
 						},
@@ -253,6 +264,95 @@ define(
 						},
 
 						/**
+						 * 多选按钮
+						 */
+						multiSelect : function(tag, str) {
+							switch (tag) {
+							case "showFeatureTable":
+								this.showOrHideFeatureTable(str);
+								break;
+							}
+						},
+
+						setFeatureLayer : function(featureLayer) {
+							this.myFeatureLayer = featureLayer;
+						},
+
+						// 显示特征表与否
+						showOrHideFeatureTable : function(str) {
+
+							console
+									.debug(" LeftToolBar_v3.21::showOrHideFeatureTable. mFeatureLayerTable="
+											+ this.mFeatureLayerTable);
+							console
+									.debug(" LeftToolBar_v3.21::showOrHideFeatureTable. str="
+											+ str);
+							if (str === "selected") {
+
+								if (this.mFeatureLayerTable == null) {
+									try {
+									this.mFeatureLayerTable = new FeatureTable(
+											{
+												featureLayer : (this.myFeatureLayer),
+												map : (this.map),
+												edutable : true,
+												dateOptions : {
+													datePattern : 'M/d/y',
+													timeEnabled : true,
+													timePattern : 'H:mm',
+												},
+												fieldInfos : [
+														{
+															nanme : 'TBBH',
+															alias : '图斑编号',
+															editable : false
+														},
+														{
+															nanme : 'XMC',
+															alias : 'XMC',
+															format : {
+																template : "${value} XMC"
+															}
+														}, {
+															nanme : '调查人',
+															alias : '调查人',
+														} ],
+												menuFunctions : [ {
+													label : "Show All Emergency Vehicles",
+													callback : function(evt) {
+														console.log(
+																" -- evt: ",
+																evt);
+														this.myFeatureLayer
+																.setDefinitionExpression("1=1");
+														this.mFeatureLayerTable
+																.refresh();
+													}
+												} ]
+											}, 'featureTable');
+									
+									console
+											.debug(" LeftToolBar_v3.21::showOrHideFeatureTable. mFeatureLayerTable="
+													+ this.mFeatureLayerTable);
+									
+									this.mFeatureLayerTable.startup();
+									}
+									catch (err) {
+										console.log(" showOrHideFeatureTable::"
+												+ err);
+									}
+									console
+											.debug(" LeftToolBar_v3.21::showOrHideFeatureTable. mFeatureLayerTable="
+													+ this.mFeatureLayerTable);
+
+								}
+
+							} else {
+
+							}
+						},
+
+						/**
 						 * 鼠标进入按钮
 						 */
 						enterEvents : function(evt) {
@@ -326,6 +426,16 @@ define(
 						},
 
 						/**
+						 * 是否显示特征表
+						 */
+						showFeatureTableButton : function() {
+							var featureTableImgUrl = this.assetsAddress
+									+ "images/lefttoolbar/feature_table_30px.png";
+							this.initMultiSelectButton(featureTableImgUrl,
+									"showFeatureTable");
+						},
+
+						/**
 						 * 只能选一个功能的按钮
 						 */
 						initSingleSelctedButton : function(imgUrl, tag) {
@@ -372,6 +482,48 @@ define(
 						 */
 						initSingleClickButton : function(imgUrl, tag) {
 							tag = "LeftToolBar_" + this.simpleClickTag + "_"
+									+ tag + "_";
+
+							this.btnAbsolutePositionTop += this.btnAbsolutePositionTopIncrease;
+
+							var currentHtml = "<div id=\"" + tag
+									+ "Div\" style=\"position: relative;\" "
+									+ " ondragstart=\"return false;\" >";
+							// 鼠标移动到图标上响应动画
+							currentHtml += "<img id=\""
+									+ tag
+									+ "SelectingImg\" src=\""
+									+ this.selectingImgUrl
+									+ "\" style=\" visibility:hidden; position: absolute; left: "
+									+ this.btnAbsolutePositionLeft
+									+ "px; top: " + this.btnAbsolutePositionTop
+									+ "px; z-index: 1; \"/>";
+							// 鼠标点击响应动画
+							currentHtml += "<img id=\""
+									+ tag
+									+ "SelectedImg\" src=\""
+									+ this.selectedImgUrl
+									+ "\" style=\" visibility:hidden; position: absolute; left: "
+									+ this.btnAbsolutePositionLeft
+									+ "px; top: " + this.btnAbsolutePositionTop
+									+ "px; z-index: 2; \"/>";
+							// 按钮图标
+							currentHtml += "<img src=\"" + imgUrl
+									+ "\" style=\" position: absolute; left: "
+									+ this.btnAbsolutePositionLeft
+									+ "px; top: " + this.btnAbsolutePositionTop
+									+ "px; z-index: 3; \" />";
+							currentHtml += "</div>";
+
+							this.ui += currentHtml;
+						},
+
+						/**
+						 * 多选功能的按钮
+						 */
+						initMultiSelectButton : function(imgUrl, tag) {
+
+							tag = "LeftToolBar_" + this.multiSelectTag + "_"
 									+ tag + "_";
 
 							this.btnAbsolutePositionTop += this.btnAbsolutePositionTopIncrease;
