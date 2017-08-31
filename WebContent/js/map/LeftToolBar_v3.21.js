@@ -109,7 +109,7 @@ define(
 
 							this.fullExtentButton();
 
-							// this.showFeatureTableButton();
+							this.showFeatureTableButton();
 						},
 
 						/**
@@ -278,77 +278,17 @@ define(
 							this.myFeatureLayer = featureLayer;
 						},
 
+						setShowOrHideFeatureTable:function(callback){
+							this.callback = callback;
+						},
+						
 						// 显示特征表与否
 						showOrHideFeatureTable : function(str) {
-
-							console
-									.debug(" LeftToolBar_v3.21::showOrHideFeatureTable. mFeatureLayerTable="
-											+ this.mFeatureLayerTable);
-							console
-									.debug(" LeftToolBar_v3.21::showOrHideFeatureTable. str="
-											+ str);
+							
 							if (str === "selected") {
-
-								if (this.mFeatureLayerTable == null) {
-									try {
-									this.mFeatureLayerTable = new FeatureTable(
-											{
-												featureLayer : (this.myFeatureLayer),
-												map : (this.map),
-												edutable : true,
-												dateOptions : {
-													datePattern : 'M/d/y',
-													timeEnabled : true,
-													timePattern : 'H:mm',
-												},
-												fieldInfos : [
-														{
-															nanme : 'TBBH',
-															alias : '图斑编号',
-															editable : false
-														},
-														{
-															nanme : 'XMC',
-															alias : 'XMC',
-															format : {
-																template : "${value} XMC"
-															}
-														}, {
-															nanme : '调查人',
-															alias : '调查人',
-														} ],
-												menuFunctions : [ {
-													label : "Show All Emergency Vehicles",
-													callback : function(evt) {
-														console.log(
-																" -- evt: ",
-																evt);
-														this.myFeatureLayer
-																.setDefinitionExpression("1=1");
-														this.mFeatureLayerTable
-																.refresh();
-													}
-												} ]
-											}, 'featureTable');
-									
-									console
-											.debug(" LeftToolBar_v3.21::showOrHideFeatureTable. mFeatureLayerTable="
-													+ this.mFeatureLayerTable);
-									
-									this.mFeatureLayerTable.startup();
-									}
-									catch (err) {
-										console.log(" showOrHideFeatureTable::"
-												+ err);
-									}
-									console
-											.debug(" LeftToolBar_v3.21::showOrHideFeatureTable. mFeatureLayerTable="
-													+ this.mFeatureLayerTable);
-
-								}
-
+								this.callback("show");
 							} else {
-
+								this.callback("hide");
 							}
 						},
 
