@@ -13,12 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+
 import com.szahch.test.practice.servlet.User;
 
 //用户登陆servlet
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
-
+	
 	/**
 	 * 
 	 */

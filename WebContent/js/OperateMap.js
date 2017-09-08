@@ -71,7 +71,7 @@ require(
 								var infoTemplate = new InfoTemplate(
 										"Attributes", "${*}");
 								featureLayer = new FeatureLayer(
-										"http://192.168.2.144:6080/arcgis/rest/services/Learning/Polygon3/MapServer/0",
+										"http://192.168.2.144:6080/arcgis/rest/services/Learning/Polygon2/MapServer/0",
 										{
 											mode : FeatureLayer.MODE_ONDEMAND,
 											outFields : [ "*" ],

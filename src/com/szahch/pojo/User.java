@@ -1,5 +1,13 @@
-package com.szahch.data.model;
+package com.szahch.pojo;
 
+
+
+/**
+ * 用户基本信息
+ * 
+ * @author AlexZHOU
+ * @since 2017.9.5
+ */
 public class User {
 	private Integer id;
 	private String account;
@@ -10,6 +18,7 @@ public class User {
 	private String telphoneNumber;
 
 	public User() {
+		
 	}
 
 	public Integer getId() {
@@ -66,5 +75,5 @@ public class User {
 
 	public void setTelphoneNumber(String telphoneNumber) {
 		this.telphoneNumber = telphoneNumber;
-	}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+	}
 }

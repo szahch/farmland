@@ -8,7 +8,6 @@ public class GdalShpTest {
 	  
 	public static void main(String[] args) {
 		
-		
 		// 注册所有的驱动
 		ogr.RegisterAll();
 		// 为了支持中文路径，请添加下面这句代码
@@ -42,5 +41,7 @@ public class GdalShpTest {
 		System.out.println(str);
 		System.out.println(ds.GetDescription());
 		System.out.println("转换成功！");
+		
+		
 	}
 }

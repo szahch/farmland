@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.szahch.data.model.UserMapper">
+<mapper namespace="com.szahch.dao.UserDao">
 
 	<!-- Result Map -->
-	<resultMap type="com.szahch.data.model.User" id="BaseResultMap">
+	<resultMap type="com.szahch.pojo.User" id="BaseResultMap">
 		<result property="id" column="USER_ID" />
 		<result property="account" column="USER_ACCOUNT" />
 		<result property="password" column="USER_PASSWORD" />

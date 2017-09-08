@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@192.168.2.144:1521:arcgis" />
+		<property name="username" value="system" />
+		<property name="password" value="arcgis" />
+		<!--连接池的最大数据库连接数 -->
+		<property name="maxActive" value="255" />
+		<!--最大等待连接中的数量 -->
+		<property name="maxIdle" value="5" />
+		<!--最大等待毫秒数 -->
+		<property name="maxWait" value="10000" />
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.szahch.dao" />
+		<property name="SqlSessionFactoryBeanName" value="sqlSessionFactory" />
+
+		<!-- 使用sqlSessionTemplateBeanName将覆盖sqlSessionFactoryBeanName的配置 -->
+		<!-- <property name="sqlSessionTemplateBeanName" value="sqlSessionFactory"/> -->
+
+		<!-- 指定标注才扫描成为Mapper -->
+		<property name="annotationClass" value="org.springframework.stereotype.Repository" />
+	</bean>
+
+</beans>

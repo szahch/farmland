@@ -25,7 +25,7 @@ public class OrcalConnectionTest {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			System.out.println("开始尝试连接数据库");
 			// 127.0.0.1是本机地址，arcgis是Oracle的数据库名
-			String url = "jdbc:oracle:thin:@127.0.0.1:1521:arcgis";
+			String url = "jdbc:oracle:thin:@192.168.2.144:1521:arcgis";
 			String user = "system";
 			String password = "arcgis";
 			con = DriverManager.getConnection(url, user, password);
