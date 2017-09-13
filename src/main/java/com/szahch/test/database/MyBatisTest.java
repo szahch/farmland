@@ -25,48 +25,47 @@ public class MyBatisTest {
 	}
 
 	private static void test3() {
-		
+
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-config.xml");
 		UserDao dao = ctx.getBean(UserDao.class);
 		User user = dao.queryById(1);
 		System.out.println(user.getName());
 	}
 
-//	private static void test1() {
-//
-//		String resource = "mybatis-config.xml";
-//
-//		new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//
-//				try {
-//
-//					Reader reader = Resources.getResourceAsReader(resource);
-//
-//					SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
-//
-//					System.out.println("Done");
-//
-//					SqlSession session = sqlSessionFactory.openSession();
-//
-//					UserDao dao = session.getMapper(UserDao.class);
-//					// dao.queryById(1);
-//					User usr = dao.queryById(1);
-//
-//					session.commit();
-//
-//					System.out.println(usr.getName());
-//
-//				} catch (IOException e) {
-//
-//					e.printStackTrace();
-//				}
-//
-//			}
-//		}).start();
-//	}
+	private static void test1() {
+
+		final String resource = "mybatis-config.xml";
+
+		new Thread(new Runnable() {
+
+			public void run() {
+
+				try {
+
+					Reader reader = Resources.getResourceAsReader(resource);
+
+					SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+
+					System.out.println("Done");
+
+					SqlSession session = sqlSessionFactory.openSession();
+
+					UserDao dao = session.getMapper(UserDao.class);
+					// dao.queryById(1);
+					User usr = dao.queryById(1);
+
+					session.commit();
+
+					System.out.println(usr.getName());
+
+				} catch (IOException e) {
+
+					e.printStackTrace();
+				}
+
+			}
+		}).start();
+	}
 
 	private static void test2() {
 
