@@ -74,7 +74,7 @@
 			<artifactId>ojdbc6-jar</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/ojdbc6.jar</systemPath>
+			<systemPath>${project.basedir}/src/main/resources/lib/ojdbc6.jar</systemPath>
 		</dependency>
 
 		<!-- 本地jar包配置 -->
@@ -83,10 +83,15 @@
 			<artifactId>gdal2.2.1-jar</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/gdal.jar</systemPath>
+			<systemPath>${project.basedir}/src/main/resources/lib/gdal.jar</systemPath>
 		</dependency>
 
-
+		<!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.9.0</version>
+		</dependency>
 
 	</dependencies>
 	<build>
@@ -114,8 +119,8 @@
 		</plugins>
 		<resources>
 			<resource>
-				<targetPath>lib/</targetPath>
-				<directory>lib/</directory>
+				<targetPath>src/main/resources/lib/</targetPath>
+				<directory>src/main/resources/lib/</directory>
 				<!-- 本地jar包引用,名字和上面那个一样 -->
 				<includes>
 					<include>**/ojdbc6.jar</include>

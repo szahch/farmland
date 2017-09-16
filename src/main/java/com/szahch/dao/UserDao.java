@@ -9,5 +9,5 @@ import com.szahch.pojo.User;
 public interface UserDao {
 
 	public User queryById(@Param("id") int id);
-
+	
 }
