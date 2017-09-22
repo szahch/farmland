@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Farmland">
-        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/WebContent/WEB-INF/lib/gdal"/>
-        <property name="context-root" value="Farmland"/>
-        <property name="java-output-path" value="/Farmland/build/classes"/>
+    <wb-module deploy-name="farmland">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources/lib"/>
+        <property name="context-root" value="farmland"/>
+        <property name="java-output-path" value="/farmland/target/classes"/>
     </wb-module>
 </project-modules>

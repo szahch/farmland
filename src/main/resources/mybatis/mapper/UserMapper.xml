@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szahch.dao.UserDao">
+
+	<resultMap type="com.szahch.pojo.User" id="BaseResultMap">
+		<result property="id" column="ID" />
+		<result property="username" column="ACCOUNT" />
+		<result property="password" column="PASSWORD" />
+		<result property="name" column="NAME" />
+	</resultMap>
+
+	<sql id="UserTable">
+		FARMLAND_TABLE_USER
+	</sql>
+
+	<sql id="User_Column_List">
+		ID,
+		ACCOUNT,
+		PASSWORD,
+		NAME
+	</sql>
+
+	<select id="queryByUserName" resultMap="BaseResultMap">
+		select
+		<include refid="User_Column_List" />
+		from
+		<include refid="UserTable" />
+		where ACCOUNT = #{username}
+	</select>
+
+	<select id="queryById" resultMap="BaseResultMap" parameterType="Object">
+		select
+		<include refid="User_Column_List" />
+		from FARMLAND_TABLE_USER where ID = #{id}
+	</select>
+
+</mapper>
