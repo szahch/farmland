@@ -8,12 +8,11 @@ $(function() {
 
 		if (checkInput()) {
 
-			$("form").action("/loginServlet");
+			 $("form").action("/farmland/login/login");
 
 		} else {
 
 			return false;
-
 		}
 
 	});
@@ -21,9 +20,10 @@ $(function() {
 	$(".validationCode_img").click(
 			function() {
 
-				$(".validationCode_img").attr("src",
-						"/Farmland/validationCode?" + Math.random());
-				
+				$(".validationCode_img").attr(
+						"src",
+						"/farmland/login/validationCode" + "?"
+								+ Math.random());
 			});
 
 	function checkInput() {
@@ -70,5 +70,4 @@ $(function() {
 		return true;
 
 	}
-
 });

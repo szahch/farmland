@@ -1,3 +1,2 @@
 eclipse.preferences.version=1
-encoding//src/main/java/com/szahch/rpc/LoginServlet.java=UTF-8
-encoding//src/main/webapp/pages/\u7701\u7EA7\u884C\u653F\u533A.json=UTF-8
+encoding//src/main/webapp/WEB-INF/views/login.jsp=UTF-8

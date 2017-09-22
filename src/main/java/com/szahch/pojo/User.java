@@ -1,56 +1,51 @@
 package com.szahch.pojo;
 
-
-
 /**
- * 用户基本信息
+ * 用户信息
  * 
- * @author AlexZHOU
- * @since 2017.9.5
+ * @author AlexZHOU 2017.9.20
+ *
  */
 public class User {
-	private Integer id;
-	private String account;
-	private String password;
-	private Integer permission;
+
+	// private String[] groups;
+	//
+	// private String[] actions;
+
+	private int id;
+
 	private String name;
-	private String mobliePhoneNumber;
-	private String telphoneNumber;
+
+	private String username;
+
+	private String password;
 
 	public User() {
-		
+
 	}
 
-	public Integer getId() {
+	// public String[] getGroups() {
+	// return groups;
+	// }
+	//
+	// public void setGroups(String[] groups) {
+	// this.groups = groups;
+	// }
+	//
+	// public String[] getActions() {
+	// return actions;
+	// }
+	//
+	// public void setActions(String[] actions) {
+	// this.actions = actions;
+	// }
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getAccount() {
-		return account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Integer getPermission() {
-		return permission;
-	}
-
-	public void setPermission(Integer permission) {
-		this.permission = permission;
 	}
 
 	public String getName() {
@@ -61,19 +56,28 @@ public class User {
 		this.name = name;
 	}
 
-	public String getMobliePhoneNumber() {
-		return mobliePhoneNumber;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setMobliePhoneNumber(String mobliePhoneNumber) {
-		this.mobliePhoneNumber = mobliePhoneNumber;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public String getTelphoneNumber() {
-		return telphoneNumber;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setTelphoneNumber(String telphoneNumber) {
-		this.telphoneNumber = telphoneNumber;
+	public void setPassword(String password) {
+		this.password = password;
 	}
+
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", username=" + username + ", password=" + password + "]";
+	}
+	
+	
+	
 }
