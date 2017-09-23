@@ -21,7 +21,8 @@
 
 		<h1>耕地动态监测信息管理系统</h1>
 
-		<form method="post" action="/farmland/login/login">
+		<form id="loginForm" name="loginForm" action="/farmland/user/login"
+			method="post">
 			<p>
 				<input type="text" name="username" id="user" placeholder="用户名">
 			</p>
@@ -34,18 +35,18 @@
 				<input id="validationCode" type="text" name="validationCode"
 					placeholder="验证码"> <img
 					style="vertical-align: middle; margin-bottom: 30px;"
-					class="validationCode_img" src="/farmland/login/validationCode">
+					onclick="changeValidationCodeImage()" class="validationCode_img"
+					src="/farmland/user/validationCode">
 			</p>
 
 			<p>
-				<input type="submit" class="loginform_submit" id="submit" value="登录">
+				<input id="login_submit_button" type="button" value="登录"
+					onclick="loginSubmit(this.form);">
 			</p>
 
 		</form>
 
 	</div>
-	
-	time:${requestScope.return}
 
 </body>
 </html>

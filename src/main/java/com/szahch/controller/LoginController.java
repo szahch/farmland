@@ -11,14 +11,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.szahch.dto.Result;
 import com.szahch.pojo.Login;
-import com.szahch.service.LoginService;
+import com.szahch.pojo.User;
+import com.szahch.service.UserService;
 import com.szahch.utils.Constants;
 import com.szahch.utils.ValidationCodeUtil;
 
@@ -29,48 +35,49 @@ import com.szahch.utils.ValidationCodeUtil;
  *
  */
 @Controller
-@RequestMapping("/login")
+@RequestMapping("/user")
 public class LoginController {
 
-	@Autowired
-	private LoginService loginService = null;
+	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-	@RequestMapping(value = "/hello")
-	private ModelAndView hello() {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("index");
-		return mv;
-	}
+	/**
+	 * 登录验证码错误
+	 */
+	private static final int VALIDATION_CODE_WRONG = -1;
+
+	/**
+	 * 登录密码错误
+	 */
+	private static final int PASSWORD_WRONG = -2;
+
+	/**
+	 * 登录帐号不存在
+	 */
+	private static final int ACCOUNT_NOT_EXIT = -3;
+
+	/**
+	 * 验证码失效
+	 */
+	private static final int VALIDATION_CODE_ABATE = -4;
+
+	@Autowired
+	private HttpSession session;
+
+	@Autowired
+	private UserService loginService = null;
 
 	/**
 	 * 登录打开页面
 	 * 
 	 */
 	@RequestMapping("/start")
-	private ModelAndView loginPage() {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("login");
-		return mv;
-	}
-
-	@RequestMapping(value = "/login")
-	private ModelAndView login(Login login) {
-
-		System.out.println(login.getPassword());
-		System.out.println(login.getUsername());
-		System.out.println(login.getValidationCode());
-		ModelAndView mv = new ModelAndView();
-		// mv.setViewName("login");
-
-//		String password = loginService.getPasswordByUsername(login.getUsername());
-//
-//		System.out.println("real password:" + password);
-		
-		System.out.println(loginService.getPasswordByUsername("850946554"));
-
-		mv.addObject("return", "succeed");
-
-		return mv;
+	private String loginPage(Model model) {
+		User usr = (User) session.getAttribute(Constants.USER_INFO);
+		if (usr == null) {
+			return "login";
+		} else {
+			return "index";
+		}
 	}
 
 	/**
@@ -86,8 +93,6 @@ public class LoginController {
 	private void validationCode(@RequestParam(value = "validationCode", required = false) String validationCode,
 			HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		HttpSession session = request.getSession();
-
 		session.setMaxInactiveInterval(5 * 60);
 
 		OutputStream outS = response.getOutputStream();
@@ -97,6 +102,44 @@ public class LoginController {
 		session.setAttribute(Constants.LOGIN_VALIDATION_CODE, (String) map.get(ValidationCodeUtil.VALIDATION_CODE));
 
 		ImageIO.write((BufferedImage) map.get(ValidationCodeUtil.IMAGE), "JPEG", outS);
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
+	@ResponseBody
+	private Result<Login> login(Login login) {
+
+		try {
+			logger.debug(login.toString());
+
+			if (session.getAttribute(Constants.LOGIN_VALIDATION_CODE) == null) {
+				return new Result<Login>(false, VALIDATION_CODE_ABATE, "验证码失效");
+			}
+			String sessionValidationCode = (session.getAttribute(Constants.LOGIN_VALIDATION_CODE)).toString()
+					.toLowerCase();
+			String loginValidationCode = login.getValidationCode().toLowerCase();
+
+			if (!sessionValidationCode.equals(loginValidationCode)) {
+				return new Result<Login>(false, VALIDATION_CODE_WRONG, "登录验证码错误");
+			}
+
+			String password = loginService.getPasswordByUsername(login.getUsername());
+			if (password == null) {
+				return new Result<Login>(false, ACCOUNT_NOT_EXIT, "帐号不存在");
+			}
+
+			if (password.equals(login.getPassword())) {
+				// 10分钟不操作就会断开
+				session.setMaxInactiveInterval(10 * 60);
+				session.setAttribute(Constants.USER_INFO, loginService.getUserByUsername(login.getUsername()));
+				return new Result<Login>(true, Constants.NETWORK_SUCCEED_CODE, login);
+			} else {
+				return new Result<Login>(false, PASSWORD_WRONG, "密码错误");
+			}
+
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return new Result<Login>(false, Constants.INTERNAL_ERROR_CODE, Constants.INTERNAL_ERROR_STRING);
+		}
 	}
 
 }

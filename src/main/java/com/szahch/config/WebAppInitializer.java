@@ -1,5 +1,6 @@
 package com.szahch.config;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -41,5 +42,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 		
 		return new String[] { "/" };
 	}
-
+	
+	
 }
