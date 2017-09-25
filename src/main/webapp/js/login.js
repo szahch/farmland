@@ -39,6 +39,9 @@ function loginSubmit(form) {
 				default:
 					break;
 				}
+			} else {
+				window.location.href = "/farmland/map/index";
+
 			}
 		}
 	});
