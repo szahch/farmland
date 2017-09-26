@@ -10,34 +10,27 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.szahch.config.RootConfig;
-import com.szahch.dao.UserDao;
+import com.szahch.dao.ActionGroupDao;
 import com.szahch.pojo.ActionGroup;
-import com.szahch.pojo.User;
 
+/**
+ * 权限组单元测试
+ * 
+ * @author AlexZHOU 2017.9.26
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { RootConfig.class })
 @WebAppConfiguration
 @Transactional
-public class UserDaoTest {
+public class ActionGroupDaoTest {
 
 	@Resource
-	private UserDao userDao;
-
-	@Test
-	public void queryByUserName() {
-		User user = userDao.queryByUserName("850946554");
-		System.out.println(user.getPassword());
-	}
+	private ActionGroupDao actionGroupDao;
 
 	@Test
 	public void queryById() {
-		User user = userDao.queryById(1);
-		System.out.println(user.getId());
-		System.out.println(user.getGroups().size());
-
-		for (int i = 0; i < user.getGroups().size(); i++) {
-			ActionGroup group = user.getGroups().get(i).getActionGroup();
-			System.out.println(group.toString());
-		}
+		ActionGroup actionGroup = actionGroupDao.queryById(21);
+		System.out.println(actionGroup.toString());
 	}
 }
