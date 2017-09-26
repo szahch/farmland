@@ -1,5 +1,7 @@
 package com.szahch.pojo;
 
+import java.util.List;
+
 /**
  * 用户信息
  * 
@@ -8,9 +10,9 @@ package com.szahch.pojo;
  */
 public class User {
 
-	// private String[] groups;
-	//
-	// private String[] actions;
+	private List<UserForActionGroup> groups = null;
+
+	private List<ActionGroup> actions = null;
 
 	private int id;
 
@@ -24,21 +26,21 @@ public class User {
 
 	}
 
-	// public String[] getGroups() {
-	// return groups;
-	// }
-	//
-	// public void setGroups(String[] groups) {
-	// this.groups = groups;
-	// }
-	//
-	// public String[] getActions() {
-	// return actions;
-	// }
-	//
-	// public void setActions(String[] actions) {
-	// this.actions = actions;
-	// }
+	public List<UserForActionGroup> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<UserForActionGroup> groups) {
+		this.groups = groups;
+	}
+
+	public List<ActionGroup> getActions() {
+		return actions;
+	}
+
+	public void setActions(List<ActionGroup> actions) {
+		this.actions = actions;
+	}
 
 	public int getId() {
 		return id;
@@ -72,12 +74,9 @@ public class User {
 		this.password = password;
 	}
 
-
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", username=" + username + ", password=" + password + "]";
 	}
-	
-	
-	
+
 }

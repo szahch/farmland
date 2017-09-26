@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szahch.dao.ActionDao">
+	<resultMap type="com.szahch.pojo.Action" id="Action">
+		<result property="id" column="ID" />
+		<result property="actionName" column="ACTION_NAME" />
+		<result property="description" column="DESCRIPTION" />
+	</resultMap>
+
+
+	<sql id="ActionTable">
+		FARMLAND_TABLE_ACTION
+	</sql>
+
+
+	<sql id="Action_Column_List">
+		ID,
+		ACTION_NAME,
+		DESCRIPTION
+	</sql>
+
+	<select id="queryById" resultMap="Action">
+		select
+		<include refid="Action_Column_List" />
+		from
+		<include refid="ActionTable" />
+		where ID = #{id}
+	</select>
+
+</mapper>
