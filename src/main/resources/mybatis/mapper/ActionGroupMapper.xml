@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szahch.dao.ActionGroupDao">
+	<resultMap type="com.szahch.pojo.ActionGroup" id="ActionGroup">
+		<result property="id" column="ID" />
+		<result property="groupName" column="GROUP_NAME" />
+		<result property="description" column="DESCRIPTION" />
+	</resultMap>
+
+
+	<sql id="Action_Group_Table">
+		FARMLAND_TABLE_ACTION_GROUP
+	</sql>
+
+
+	<sql id="Action_Group_Column_List">
+		ID,
+		GROUP_NAME,
+		DESCRIPTION
+	</sql>
+
+	<select id="queryById" resultMap="ActionGroup">
+		select
+		<include refid="Action_Group_Column_List" />
+		from
+		<include refid="Action_Group_Table" />
+		where ID = #{id}
+	</select>
+
+</mapper>

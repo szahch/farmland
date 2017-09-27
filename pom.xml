@@ -135,6 +135,15 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+
+
 		<!-- 本地jar包配置 -->
 		<!-- <dependency> <groupId>oracle.jdbc.driver.OracleDriver</groupId> <artifactId>ojdbc6-jar</artifactId> 
 			<version>1.0</version> <scope>system</scope> <systemPath>${project.basedir}/src/main/resources/lib/ojdbc6.jar</systemPath> 

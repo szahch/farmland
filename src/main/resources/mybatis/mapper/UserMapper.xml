@@ -3,12 +3,23 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.szahch.dao.UserDao">
-
-	<resultMap type="com.szahch.pojo.User" id="BaseResultMap">
+	<!-- 登录查询时单纯查询以下4个字段 -->
+	<resultMap type="com.szahch.pojo.User" id="UserOnly">
 		<result property="id" column="ID" />
 		<result property="username" column="ACCOUNT" />
 		<result property="password" column="PASSWORD" />
 		<result property="name" column="NAME" />
+	</resultMap>
+
+	<!-- 登录成功后查询获得user全部的信息 -->
+	<resultMap type="com.szahch.pojo.User" id="UserWithAction">
+		<id column="ID" property="id" />
+		<result property="id" column="ID" />
+		<result property="username" column="ACCOUNT" />
+		<result property="password" column="PASSWORD" />
+		<result property="name" column="NAME" />
+		<collection property="groups" column="ID" javaType="ArrayList"
+			select="com.szahch.dao.UserForActionGroupDao.queryByUserId" />
 	</resultMap>
 
 	<sql id="UserTable">
@@ -22,7 +33,7 @@
 		NAME
 	</sql>
 
-	<select id="queryByUserName" resultMap="BaseResultMap">
+	<select id="queryByUserName" resultMap="UserOnly">
 		select
 		<include refid="User_Column_List" />
 		from
@@ -30,10 +41,12 @@
 		where ACCOUNT = #{username}
 	</select>
 
-	<select id="queryById" resultMap="BaseResultMap" parameterType="Object">
+	<select id="queryById" resultMap="UserWithAction" parameterType="Object">
 		select
 		<include refid="User_Column_List" />
-		from FARMLAND_TABLE_USER where ID = #{id}
+		from
+		<include refid="UserTable" />
+		where ID = #{id}
 	</select>
 
 </mapper>
