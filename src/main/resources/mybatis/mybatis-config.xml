@@ -5,9 +5,10 @@
 
 <configuration>
 	<mappers>
+		<mapper resource="mybatis/mapper/ActionAndActionGroupMapper.xml" />
 		<mapper resource="mybatis/mapper/ActionGroupMapper.xml" />
 		<mapper resource="mybatis/mapper/ActionMapper.xml" />
-		<mapper resource="mybatis/mapper/UserForActionGroupMapper.xml" />
+		<mapper resource="mybatis/mapper/UserAndActionGroupMapper.xml" />
 		<mapper resource="mybatis/mapper/UserMapper.xml" />
 	</mappers>
 

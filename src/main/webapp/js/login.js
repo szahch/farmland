@@ -23,25 +23,28 @@ function loginSubmit(form) {
 			console.log(msg);
 			console.log(msg.resultCode);
 			if (!msg.success) {
-				switch (msg.resultCode) {
-				case -1:
-					alert("登录验证码错误");
-					break;
-				case -2:
-					alert("登录密码错误");
-					break;
-				case -3:
-					alert("登录帐号不存在");
-					break;
-				case -4:
-					alert("验证码失效");
-					break;
-				default:
-					break;
-				}
+				// 新增 Alex_ZHOU 2017.9.28
+				alert(msg.errorInfo);
+				changeValidationCodeImage();
+				// 删除 Alex_ZHOU 2017.9.28
+				// switch (msg.resultCode) {
+				// case -1:
+				// alert("登录验证码错误");
+				// break;
+				// case -2:
+				// alert("登录密码错误");
+				// break;
+				// case -3:
+				// alert("登录帐号不存在");
+				// break;
+				// case -4:
+				// alert("验证码失效");
+				// break;
+				// default:
+				// break;
+				// }
 			} else {
 				window.location.href = "/farmland/map/index";
-
 			}
 		}
 	});

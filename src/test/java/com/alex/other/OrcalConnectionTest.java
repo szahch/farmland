@@ -1,4 +1,4 @@
-package com.alex;
+package com.alex.other;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -35,7 +35,8 @@
 <!-- JavaScript start -->
 <script
 	src="http://192.168.2.101:8080/arcgis_js_api_v3.21/library/3.21/3.21/init.js"></script>
-<script src="http://192.168.2.101:8080/farmland/js/jquery-3.2.1.min.js"></script>
+<!-- <script src="http://192.168.2.101:8080/farmland/js/jquery-3.2.1.min.js"></script> -->
+<script src="../js/jquery-3.2.1.min.js"></script>
 <script src="../js/map.js"></script>
 <!-- JavaScript end -->
 
@@ -78,7 +79,6 @@ a:active {
 
 				<div
 					style="float: right; padding-top: 49px; padding-right: 10px; height: 20px">
-
 					<div style="color: white; float: left;">${user.name }，欢迎您。</div>
 					<a style="float: right;" href="/farmland/user/signOut">注销</a>
 				</div>
@@ -101,10 +101,9 @@ a:active {
 			style="background-color: #acb386; width: 100px;"></div>
 		<div data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="region:'bottom', splitter:'true'"
-			style="background-color: #b39b86; height: 100px;">${user.name }
+			style="background-color: #b39b86; height: 100px;">${user.name}
 		</div>
 
-		<div></div>
 	</div>
 	<!-- drag -->
 

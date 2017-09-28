@@ -47,4 +47,15 @@ public class Action {
 		this.description = description;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Action [id=" + id + ", actionName=" + actionName + ", description=" + description + ", hashCode()="
+				+ hashCode() + ", toString()=" + super.toString() + "]";
+	}
+
 }

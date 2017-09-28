@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.szahch.config.RootConfig;
 import com.szahch.dao.UserDao;
-import com.szahch.pojo.ActionGroup;
 import com.szahch.pojo.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -33,11 +32,5 @@ public class UserDaoTest {
 	public void queryById() {
 		User user = userDao.queryById(1);
 		System.out.println(user.getId());
-		System.out.println(user.getGroups().size());
-
-		for (int i = 0; i < user.getGroups().size(); i++) {
-			ActionGroup group = user.getGroups().get(i).getActionGroup();
-			System.out.println(group.toString());
-		}
 	}
 }
