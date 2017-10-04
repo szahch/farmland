@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.szahch.dao.UserForActionGroupDao">
-	<resultMap type="com.szahch.pojo.UserForActionGroup" id="UserForActionGroup">
+<mapper namespace="com.szahch.dao.UserAndActionGroupDao">
+	<resultMap type="com.szahch.pojo.UserAndActionGroup" id="UserAndActionGroup">
 		<result property="id" column="ID" />
 		<result property="groupId" column="GROUP_ID" />
 		<result property="userId" column="USER_ID" />
-		<association property="actionGroup" column="GROUP_ID"
-			select="com.szahch.dao.ActionGroupDao.queryById" />
+		<!-- <association property="actionGroup" column="GROUP_ID" select="com.szahch.dao.ActionGroupDao.queryById" 
+			/> -->
 	</resultMap>
 
 	<sql id="UGTable">
@@ -20,7 +20,7 @@
 		USER_ID
 	</sql>
 
-	<select id="queryByUserId" resultMap="UserForActionGroup">
+	<select id="queryByUserId" resultMap="UserAndActionGroup">
 		select
 		<include refid="UGColumnList" />
 		from
@@ -28,7 +28,7 @@
 		where USER_ID = #{userId}
 	</select>
 
-	<select id="queryUserForActionGroupListByUserId" resultMap="UserForActionGroup">
+	<select id="queryUserForActionGroupListByUserId" resultMap="UserAndActionGroup">
 		select
 		<include refid="UGColumnList" />
 		from

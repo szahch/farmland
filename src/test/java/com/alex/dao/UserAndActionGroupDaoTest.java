@@ -12,8 +12,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.szahch.config.RootConfig;
-import com.szahch.dao.UserForActionGroupDao;
-import com.szahch.pojo.UserForActionGroup;
+import com.szahch.dao.UserAndActionGroupDao;
+import com.szahch.pojo.UserAndActionGroup;
 
 /**
  * 权限组测试
@@ -25,22 +25,25 @@ import com.szahch.pojo.UserForActionGroup;
 @ContextConfiguration(classes = { RootConfig.class })
 @WebAppConfiguration
 @Transactional
-public class UserForActionGroupDaoTest {
+public class UserAndActionGroupDaoTest {
 	@Resource
-	private UserForActionGroupDao userForActionGroupDao;
+	private UserAndActionGroupDao userForActionGroupDao;
 
+	/**
+	 * 查询条目大于1条时将会报错
+	 */
 	@Test
 	public void queryByUserId() {
-		UserForActionGroup group = userForActionGroupDao.queryByUserId(1);
+		UserAndActionGroup group = userForActionGroupDao.queryByUserId(1);
 		System.out.println(group.getGroupId());
 	}
-
+	
 	@Test
 	public void queryUserForActionGroupListByUserId() {
-		List<UserForActionGroup> list = userForActionGroupDao.queryUserForActionGroupListByUserId(1);
+		List<UserAndActionGroup> list = userForActionGroupDao.queryUserForActionGroupListByUserId(1);
 		for (int i = 0; i < list.size(); i++) {
-			UserForActionGroup group = list.get(i);
-			System.out.println(group.getActionGroup().toString());
+			UserAndActionGroup group = list.get(i);
+			System.out.println(group.toString());
 		}
 	}
 }

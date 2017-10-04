@@ -3,7 +3,9 @@ package com.szahch.controller;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -22,8 +24,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.szahch.dto.Result;
+import com.szahch.pojo.Action;
+import com.szahch.pojo.ActionGroup;
 import com.szahch.pojo.Login;
 import com.szahch.pojo.User;
+import com.szahch.service.ActionAndActionGroupService;
+import com.szahch.service.UserAndActionGroupService;
 import com.szahch.service.UserService;
 import com.szahch.utils.Constants;
 import com.szahch.utils.ValidationCodeUtil;
@@ -60,11 +66,27 @@ public class UserController {
 	 */
 	private static final int VALIDATION_CODE_ABATE = -4;
 
+	/**
+	 * 帐号格式错误
+	 */
+	private static final int ACCOUNT_FORMAT_WRONG = -5;
+
+	/**
+	 * 密码格式错误
+	 */
+	private static final int PASSWORD_FORMAT_WRONG = -6;
+
 	@Autowired
 	private HttpSession session;
 
 	@Autowired
 	private UserService loginService = null;
+
+	@Autowired
+	private UserAndActionGroupService userAndActionGroupService = null;
+
+	@Autowired
+	private ActionAndActionGroupService actionAndActionGroupService = null;
 
 	/**
 	 * 登录打开页面
@@ -131,6 +153,16 @@ public class UserController {
 				return new Result<Login>(false, VALIDATION_CODE_WRONG, "登录验证码错误");
 			}
 
+			Pattern p = Pattern.compile("[a-zA-Z0-9]{1,16}");
+
+			if (!p.matcher(login.getUsername()).matches()) {
+				return new Result<Login>(false, ACCOUNT_FORMAT_WRONG, "帐号格式错误");
+			}
+
+			if (!p.matcher(login.getPassword()).matches()) {
+				return new Result<Login>(false, PASSWORD_FORMAT_WRONG, "密码格式错误");
+			}
+
 			String password = loginService.getPasswordByUsername(login.getUsername());
 			if (password == null) {
 				return new Result<Login>(false, ACCOUNT_NOT_EXIT, "帐号不存在");
@@ -139,7 +171,16 @@ public class UserController {
 			if (password.equals(login.getPassword())) {
 				// 10分钟不操作就会断开
 				session.setMaxInactiveInterval(10 * 60);
-				session.setAttribute(Constants.USER_INFO, loginService.getUserByUsername(login.getUsername()));
+				// 设置用户基本信息到seesion里面
+				User user = loginService.getUserByUsername(login.getUsername());
+				session.setAttribute(Constants.USER_INFO, user);
+				// 设置当前用户的权限组
+				List<ActionGroup> groupList = userAndActionGroupService.getActionGroupListByUser(user);
+				session.setAttribute(Constants.USER_ACTION_GROUP_LIST, groupList);
+				// 设置当前用户的权限
+				List<Action> actionList = actionAndActionGroupService.getActionListByActionGroupList(groupList);
+				session.setAttribute(Constants.USER_ACTION_LIST, actionList);
+
 				return new Result<Login>(true, Constants.NETWORK_SUCCEED_CODE, login);
 			} else {
 				return new Result<Login>(false, PASSWORD_WRONG, "密码错误");

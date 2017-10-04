@@ -16,7 +16,7 @@ public interface UserService {
 	 *            用户帐号
 	 */
 	public String getPasswordByUsername(String username);
-	
+
 	/**
 	 * 通过用户帐号获取用户所有信息</b> 1.帐号查询成功，用户所有信息</b> 2.帐号查询失败，返回空</b>
 	 * 
@@ -24,4 +24,5 @@ public interface UserService {
 	 * @return
 	 */
 	public User getUserByUsername(String username);
+
 }

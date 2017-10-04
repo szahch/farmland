@@ -18,8 +18,8 @@
 		<result property="username" column="ACCOUNT" />
 		<result property="password" column="PASSWORD" />
 		<result property="name" column="NAME" />
-		<collection property="groups" column="ID" javaType="ArrayList"
-			select="com.szahch.dao.UserForActionGroupDao.queryByUserId" />
+		<!-- <collection property="groups" column="ID" javaType="ArrayList" select="com.szahch.dao.UserForActionGroupDao.queryByUserId" 
+			/> -->
 	</resultMap>
 
 	<sql id="UserTable">

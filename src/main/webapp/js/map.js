@@ -79,7 +79,7 @@ require(
 								var infoTemplate = new InfoTemplate(
 										"Attributes", "${*}");
 								featureLayer = new FeatureLayer(
-										"http://192.168.2.144:6080/arcgis/rest/services/Learning/Polygon2/MapServer/0",
+										"http://192.168.2.144:6080/arcgis/rest/services/耕地现状动态监测/GDJC2017/MapServer/0",
 										{
 											mode : FeatureLayer.MODE_ONDEMAND,
 											outFields : [ "*" ],

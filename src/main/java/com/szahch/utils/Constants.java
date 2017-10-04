@@ -18,6 +18,16 @@ public class Constants {
 	public static final String USER_INFO = "UserInfo";
 
 	/**
+	 * Session 保留单个用户权限组信息
+	 */
+	public static final String USER_ACTION_GROUP_LIST = "UserActionGroupList";
+
+	/**
+	 * Session 保留单个用户所有权限列表
+	 */
+	public static final String USER_ACTION_LIST = "UserActionList";
+
+	/**
 	 * 网络传输正确返回代码
 	 */
 	public static final int NETWORK_SUCCEED_CODE = 200;
